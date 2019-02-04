@@ -24,5 +24,3 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 model.fit(test_images, test_labels, epochs=5)
 
-list.append(10)
-print(list)
