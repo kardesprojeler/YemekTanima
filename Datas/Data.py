@@ -15,7 +15,7 @@ class Data:
 
     @classmethod
     def ReadSinif(x):
-        Data.cursor.execute("select * from blt_01_01_sinif")
+        Data.cursor.execute("select * from tbl_01_01_sinif")
         row = Data.cursor.fetchone()
         while row:
             dtSinif = DataSinif()
@@ -29,16 +29,16 @@ class Data:
         return Data.datasiniflist
         pass
     @classmethod
-    def InsertSinif(cls, labelnumber, sinifname, foldername):
-        Data.cursor.execute("select * from blt_01_01_sinif where (sinifname = ? or " +
-                            "foldername = ? or labelnumber = ?)", sinifname, foldername, labelnumber)
+    def InsertSinif(cls, sinifname, foldername):
+        Data.cursor.execute("select * from tbl_01_01_sinif where (sinifname = ? or " +
+                            "foldername = ?)", sinifname, foldername)
         row = Data.cursor.fetchone();
         if row:
             messagebox.showinfo("Uyarı!", "Böyle Bir Satır Mevcut")
             pass
         else:
-            Data.cursor.execute("insert into blt_01_01_sinif(ref, labelnumber, sinifname, foldername) " +
-                                "values(?, ?, ?, ?)", 3, labelnumber, sinifname, foldername)
+            Data.cursor.execute("insert into tbl_01_01_sinif(sinifname, foldername) " +
+                                "values(?, ?)", sinifname, foldername)
             Data.cnxn.commit()
             pass
         pass

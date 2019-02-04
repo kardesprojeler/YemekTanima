@@ -6,8 +6,8 @@ top = tk.Tk()
 
 
 def AddDataSinif():
+    file = filedialog.askdirectory()
     data = Data.Data()
-    data.InsertSinif(2, "Nohut", "Nohut")
     pass
 
 def AddFile():
