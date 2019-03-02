@@ -95,7 +95,7 @@ class Data:
         pass
     def getsinifcount(self):
         self.cursor.execute("select sinifcount = count(*) from tbl_01_01_sinif")
-        row = Data.cursor.fetchone()
+        row = self.cursor.fetchone()
         if row is not None:
             return row[0]
         return 0
@@ -177,6 +177,22 @@ class Data:
         return images, labels
         pass
 
+    def read_image(self, width, height):
+        with wx.FileDialog(None, 'Open', r'C:\Users\BULUT\Documents\GitHub\YemekTanima\images\Pilav',
+                           style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST) as fileDialog:
+
+            if fileDialog.ShowModal() == wx.ID_CANCEL:
+                return  # the user changed their mind
+
+            # save the current contents in the file
+            pathname = fileDialog.GetPath()
+
+            file_content = pilimage.open(pathname)
+            im = file_content.resize((width, height), pilimage.ANTIALIAS)
+            im = [np.array(im)]
+            im = np.array(im).reshape(1, width, height,  3)
+
+            return im
 
 class DataSinif:
     labelnumber= -1

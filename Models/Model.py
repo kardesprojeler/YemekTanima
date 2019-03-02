@@ -4,7 +4,6 @@ from Datas import Data as data
 import os
 
 class Model:
-
     def __init__(self):
         self.dt = data.Data()
     dt = None
@@ -50,7 +49,7 @@ class Model:
     def make_model(self):
         self.num_class = self.dt.getsinifcount()
         self.x = tf.placeholder(tf.float32, [None, self.image_height, self.image_width, self.image_deep])
-        self.y_true = tf.placeholder(tf.float32, [None, self.num_class])
+        self.y_true = tf.placeholder(tf.float32, [None, self.num_class], name='y_true')
 
         conv1 = self.conv_layer(self.x, self.image_deep, 32, scope='conv1', use_pooling=True)
         conv2 = self.conv_layer(conv1, 32, 64, scope='conv2', use_pooling=True)
@@ -61,7 +60,7 @@ class Model:
         fc2 = self.fc_layer(fc1, 512, 256, scope='fc2', use_relu=True, batch_normalization=True)
 
         logits = self.fc_layer(fc2, 256, self.num_class, scope='fc_out', use_relu=False, batch_normalization=False)
-        y = tf.nn.softmax(logits)
+        y = tf.nn.softmax(logits, name="y_pred")
 
         xent = tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=self.y_true)
         self.loss = tf.reduce_mean(xent)
@@ -125,3 +124,18 @@ class Model:
         feed_dict_test = {self.x: x_batch, self.y_true: y_batch, self.phase: False}
         acc = self.sess.run(self.accuracy, feed_dict=feed_dict_test)
         print('Testing accuracy:', acc)
+
+    def test_accuracy_for_one_image(self):
+        x_batch = self.dt.read_image(self.image_width, self.image_height)
+
+        graph = tf.get_default_graph()
+
+        y_pred = graph.get_tensor_by_name("y_pred:0")
+        y_true = graph.get_tensor_by_name("y_true:0")
+
+        y_test_images = np.zeros((1, 10))
+        feed_dict_test = {self.x: x_batch, self.y_true: y_test_images, self.phase: False}
+
+        result = self.sess.run(y_pred, feed_dict=feed_dict_test)
+
+        print('Tahmin Sonucu:', result)

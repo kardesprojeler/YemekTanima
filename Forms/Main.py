@@ -5,10 +5,12 @@ import wx
 import Forms.frmTestImage as frmImage
 import Forms.frmSinifEkle as frmSinif
 
+
 class Main(wx.MDIParentFrame):
     def __init__(self):
         wx.MDIParentFrame.__init__(self, None, -1, "Resim Tanıma", size=(600, 400))
         self.data = data.Data()
+        self.model = model.Model()
         self.make_main_form()
 
     def make_main_form(self):
@@ -28,11 +30,14 @@ class Main(wx.MDIParentFrame):
         menu_model.Append(2000, "Modeli Oluştur")
         menu_model.Append(2001, "Modeli Eğit")
         menu_model.Append(2002, "Modeli Test Et")
+        menu_model.Append(2003, "Tahmin Yap")
+
         menubar.Append(menu_model, "Model")
 
         self.Bind(wx.EVT_MENU, self.make_model, id=2000)
         self.Bind(wx.EVT_MENU, self.train_model, id=2001)
         self.Bind(wx.EVT_MENU, self.test_model, id=2002)
+        self.Bind(wx.EVT_MENU, self.test_model_for_one_image, id=2003)
 
         menu_model = wx.Menu()
         menu_model.Append(3000, "Hakkımızda")
@@ -42,7 +47,6 @@ class Main(wx.MDIParentFrame):
 
     def make_model(self, evt):
         #self.labelText.set('Model Oluşturuluyor...')
-        self.model = model.Model()
         self.model.make_model()
         wx.MessageBox('Model Oluşturuldu', 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
 
@@ -63,6 +67,10 @@ class Main(wx.MDIParentFrame):
     def add_test_file(self, evt):
         form = frmImage.frmTestImage(self)
         form.Show(True)
+
+    def test_model_for_one_image(self, evt):
+        self.model.test_accuracy_for_one_image()
+
 
 if __name__ == '__main__':
     app = wx.App()
