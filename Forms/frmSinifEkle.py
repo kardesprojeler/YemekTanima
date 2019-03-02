@@ -1,4 +1,3 @@
-from tkinter import *
 from Datas import Data
 import wx
 
@@ -16,7 +15,7 @@ class frmSinifEkle(wx.MDIChildFrame):
         vbox = wx.BoxSizer(wx.VERTICAL)
 
         hbox1 = wx.BoxSizer(wx.HORIZONTAL)
-        l1 = wx.StaticText(panel, -1, "Klasör İsmi")
+        l1 = wx.StaticText(panel, -1, "sınıf İsmi")
 
         hbox1.Add(l1, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
         self.t1 = wx.TextCtrl(panel)
@@ -25,11 +24,10 @@ class frmSinifEkle(wx.MDIChildFrame):
         vbox.Add(hbox1)
 
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        l2 = wx.StaticText(panel, -1, "Sınıf İsmi")
+        l2 = wx.StaticText(panel, -1, "Klasör İsmi")
 
         hbox2.Add(l2, 1, wx.ALIGN_LEFT | wx.ALL, 5)
         self.t2 = wx.TextCtrl(panel)
-        self.t2.SetMaxLength(5)
 
         hbox2.Add(self.t2, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
         vbox.Add(hbox2)
@@ -43,4 +41,7 @@ class frmSinifEkle(wx.MDIChildFrame):
         panel.SetSizer(vbox)
 
     def OnAddSinif(self, event):
-        self.t2.SetValue(self.t1.GetValue())
+        self.data.add_data_sinif(self.t1.GetValue(), self.t2.GetValue())
+        self.t1.Clear()
+        self.t2.Clear()
+

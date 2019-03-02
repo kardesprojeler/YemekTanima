@@ -2,7 +2,8 @@ import tkinter
 from Models import Model as model
 from Datas import Data as data
 import wx
-import Forms.frmSinifEkle as frm
+import Forms.frmTestImage as frmImage
+import Forms.frmSinifEkle as frmSinif
 
 class Main(wx.MDIParentFrame):
     def __init__(self):
@@ -19,9 +20,9 @@ class Main(wx.MDIParentFrame):
         menu_data.Append(1002, "Test Resmi Ekle")
         menubar.Append(menu_data, "Veriler")
 
-        self.Bind(wx.EVT_MENU, self.add_datasinif, id=1000)
+        self.Bind(wx.EVT_MENU, self.add_data_sinif, id=1000)
         self.Bind(wx.EVT_MENU, self.data.add_training_file, id=1001)
-        self.Bind(wx.EVT_MENU, self.data.add_test_file, id=1002)
+        self.Bind(wx.EVT_MENU, self.add_test_file, id=1002)
 
         menu_model = wx.Menu()
         menu_model.Append(2000, "Modeli Oluştur")
@@ -43,24 +44,25 @@ class Main(wx.MDIParentFrame):
         #self.labelText.set('Model Oluşturuluyor...')
         self.model = model.Model()
         self.model.make_model()
-        #self.labelText.set('Model Oluşturuldu')
+        wx.MessageBox('Model Oluşturuldu', 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
 
     def train_model(self, evt):
         #self.status_label.config(text='Model Eğitiliyor...')
         #self.labelText.set('Model Eğitiliyor...')
-        self.model.train_step(1000)
+        self.model.train_step(400)
         #self.labelText.set('Eğitim Tamamlandı')
 
     def test_model(self, evt):
         self.model.test_accuracy()
         pass
 
-    def add_datasinif(self, evt):
-        form = frm.frmSinifEkle(self)
+    def add_data_sinif(self, evt):
+        form = frmSinif.frmSinifEkle(self)
         form.Show(True)
-    def add_file(self, evt):
-        self.data.add_test_file()
 
+    def add_test_file(self, evt):
+        form = frmImage.frmTestImage(self)
+        form.Show(True)
 
 if __name__ == '__main__':
     app = wx.App()

@@ -1,5 +1,4 @@
 import pyodbc as odbc
-from tkinter import *
 from tkinter import messagebox, filedialog, ttk
 import shutil
 import os
@@ -7,7 +6,6 @@ import numpy as np
 from PIL import Image as pilimage
 import tensorflow as tf
 import wx
-import matplotlib.image as mtplot
 
 fields = 'Sınıf İsmi', 'Klasör İsmi'
 conn_str = (
@@ -44,11 +42,6 @@ class Data:
         finding_index = siniflist.index(sinif)
         label[finding_index] = 1
         return label
-        pass
-    def reshape(self):
-        for image in self:
-
-            pass
         pass
 
     def read_train_images(self, heigh, width):
@@ -87,17 +80,17 @@ class Data:
                                                                            width, 3)
         return self.test_images, self.test_labels
 
-    def insertsinif(cls, sinifname, foldername):
-        Data.cursor.execute("select * from tbl_01_01_sinif where (sinifname = ? or " +
+    def insertsinif(self, sinifname, foldername):
+        self.cursor.execute("select * from tbl_01_01_sinif where (sinifname = ? or " +
                             "foldername = ?)", sinifname, foldername)
-        row = Data.cursor.fetchone()
+        row = self.cursor.fetchone()
         if row:
-            messagebox.showinfo("Uyarı!", "Böyle Bir Satır Mevcut")
+            wx.MessageBox('Böyle Bir Satır Mevcut', 'Attention', wx.OK | wx.ICON_WARNING)
             pass
         else:
-            Data.cursor.execute("insert into tbl_01_01_sinif(sinifname, foldername) " +
+            self.cursor.execute("insert into tbl_01_01_sinif(sinifname, foldername) " +
                                 "values(?, ?)", sinifname, foldername)
-            Data.cnxn.commit()
+            self.cnxn.commit()
             pass
         pass
     def getsinifcount(self):
@@ -107,48 +100,21 @@ class Data:
             return row[0]
         return 0
         pass
-    def adddatasinif(self, entries):
-        sinifname = entries[0][1].get()
-        foldername = entries[1][1].get()
+
+    def add_data_sinif(self, sinifname, foldername):
         if sinifname is not '' and foldername is not '':
             if not os.path.exists(r"C:/Users/BULUT/Documents/GitHub/YemekTanima/images/" + foldername):
                 os.mkdir(r"C:/Users/BULUT/Documents/GitHub/YemekTanima/images/" + foldername)
-                Data.insertsinif(entries, foldername, sinifname)
+                self.insertsinif(foldername, sinifname)
                 pass
             else:
-                messagebox.showinfo("", "Bu sınıf ismi mevcut!")
+                wx.MessageBox('Bu sınıf ismi mevcut', 'Attention', wx.OK | wx.ICON_WARNING)
                 pass
             pass
         else:
-            messagebox.showinfo("", "Alanları doldurunuz!")
+            wx.MessageBox('Alanları doldurunuz!', 'Attention', wx.OK | wx.ICON_WARNING)
             pass
         pass
-
-    def adddatasinifx(self):
-        root = Tk()
-        ents = self.makeform(root, ['Klasör İsmi', 'Sınıf İsmi'])
-
-        root.bind('<Return>', (lambda event, e=ents: self.adddatasinif(e)))
-        b1 = Button(root, text='Tamam',
-                    command=(lambda e=ents: self.adddatasinif(e)))
-        b1.pack(side=LEFT, padx=5, pady=5)
-
-        b2 = Button(root, text='İptal', command=exit)
-        b2.pack(side=LEFT, padx=5, pady=5)
-        root.mainloop()
-        pass
-
-    def makeform(self, root, fields):
-        entries = []
-        for field in fields:
-            row = Frame(root)
-            lab = Label(row, width=15, text=field, anchor='w')
-            ent = Entry(row)
-            row.pack(side=TOP, fill=X, padx=5, pady=5)
-            lab.pack(side=LEFT)
-            ent.pack(side=RIGHT, expand=YES, fill=X)
-            entries.append((field, ent))
-        return entries
 
     def add_training_file(self):
         src = filedialog.askopenfile()
@@ -159,47 +125,27 @@ class Data:
         else:
             messagebox.showinfo('Bu dosya mevcut')
         pass
-    pass
 
-    def add_test_file(self):
-        root = Tk()
-        root.focus_set()  # <-- move focus to this widget
-        root.title("Test Resmi Ekle")
-        root.geometry("250x200")
-
-        siniflist = self.get_sinif_list()
-        siniflar = []
-
-        for sinif in siniflist:
-            siniflar.append(sinif.sinifname)
-
-        top_form = Frame(root)
-        top_form.pack()
-
-        Label(top_form, text='Sınıflar').grid(row=0, column=0)
-        sinif_combo = ttk.Combobox(top_form, values=siniflar)
-        sinif_combo.bind("<<>ComboboxSelected>")
-        sinif_combo.grid(row=0, column=1)
-        Button(top_form, text='Resim Ekle',
-               command=lambda: self.add_test_image(siniflist[[s.sinifname for s in siniflist].
-                                                   index(sinif_combo.get())].labelnumber)).grid(row=1, column=0)
-        Button(top_form, text='Kapat', command=quit).grid(row=1, column=1)
-
-        root.mainloop()
-
-    def add_test_image(self, label_number):
+    def add_test_image(self, parent, label_number):
         if label_number != None:
-            src = filedialog.askopenfile()
-            dest = r'C:\Users\BULUT\Documents\GitHub\YemekTanima\images\test_images'
-            if not os.path.exists(os.path.join(dest, os.path.split(src.name)[1])):
-                shutil.copy(src.name, dest)
-                self.cursor.execute('insert into tbl_01_01_testimage(labelnumber, foldername, filename) '
-                                    'values(?, ?, ?)', label_number, dest, os.path.split(src.name)[1])
-                self.cnxn.commit()
-                pass
-            else:
-                messagebox.showinfo('Bu dosya mevcut')
-                pass
+            with wx.FileDialog(None, 'Open', r'C:\Users\BULUT\Documents\GitHub\YemekTanima\images\Pilav',
+                               style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST) as fileDialog:
+
+                if fileDialog.ShowModal() == wx.ID_CANCEL:
+                    return  # the user changed their mind
+
+                # save the current contents in the file
+                pathname = fileDialog.GetPath()
+                dest = r'C:\Users\BULUT\Documents\GitHub\YemekTanima\images\test_images'
+                if not os.path.exists(os.path.join(dest, os.path.split(pathname)[1])):
+                    shutil.copy(pathname, dest)
+                    self.cursor.execute('insert into tbl_01_01_testimage(labelnumber, foldername, filename) '
+                                        'values(?, ?, ?)', label_number, dest, os.path.split(pathname)[1])
+                    self.cnxn.commit()
+                    pass
+                else:
+                    messagebox.showinfo('Bu dosya mevcut')
+                    pass
         else:
             messagebox.showinfo('Lütfen sınıf seçiniz')
 
