@@ -6,6 +6,9 @@ import numpy as np
 from PIL import Image as pilimage
 import tensorflow as tf
 import wx
+import Datas.SelectiveSearch as selectivesearch
+import cv2
+import matplotlib.pyplot as plt
 
 fields = 'Sınıf İsmi', 'Klasör İsmi'
 conn_str = (
@@ -119,11 +122,11 @@ class Data:
     def add_training_file(self):
         src = filedialog.askopenfile()
         dest = filedialog.askdirectory(initialdir=r'C:\Users\BULUT\Documents\GitHub\YemekTanima\images')
-        if not 1 != 1:
+        if not os.path.exists(os.path.join(dest, os.path.split(src)[1])):
             shutil.copy(src.name, dest)
             pass
         else:
-            messagebox.showinfo('Bu dosya mevcut')
+            wx.MessageBox('Bu dosya mevcut!', 'Attention', wx.OK | wx.ICON_WARNING)
         pass
 
     def add_test_image(self, parent, label_number):
@@ -178,7 +181,7 @@ class Data:
         pass
 
     def read_image(self, width, height):
-        with wx.FileDialog(None, 'Open', r'C:\Users\BULUT\Documents\GitHub\YemekTanima\images\Pilav',
+        with wx.FileDialog(None, 'Open', r'C:\Users\BULUT\Documents\GitHub\YemekTanima\images',
                            style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST) as fileDialog:
 
             if fileDialog.ShowModal() == wx.ID_CANCEL:
@@ -190,10 +193,68 @@ class Data:
             file_content = pilimage.open(pathname)
             im = file_content.resize((width, height), pilimage.ANTIALIAS)
             im = [np.array(im)]
-            im = np.array(im).reshape(1, width, height,  3)
+            im = np.array(im).reshape(1, width, height, 3)
 
             return im
 
+    def get_fragment_tray_images(self, height, width):
+        with wx.FileDialog(None, 'Open', r'C:\Users\BULUT\Desktop',
+                           style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST) as fileDialog:
+            if fileDialog.ShowModal() == wx.ID_CANCEL:
+                return  # the user changed their mind
+
+            return self.fragment_tray_image(fileDialog.GetPath(), height, width)
+
+    def fragment_tray_image(self, path, height, width):
+        img = pilimage.open(path)
+        img = img.resize((500, 500), pilimage.ANTIALIAS)
+        im = np.asarray(img, dtype='uint8')
+        img_lbl, regions = selectivesearch.selective_search(
+            im, scale=300, sigma=2, min_size=6)
+
+        candidates = set()
+        for r in regions:
+            # excluding same rectangle (with different segments)
+            if r['rect'] in candidates:
+                continue
+            # excluding regions smaller than 2000 pixels
+            if r['size'] < 2000:
+                continue
+            x, y, w, h = r['rect']
+            if w / h > 1.2 or h / w > 1.2:
+                continue
+            candidates.add(r['rect'])
+
+        self.delete_supererogator_rect(candidates)
+        fragmented_images = []
+        fig = plt.figure(figsize=(8, 8))
+        i = 0
+        for x, y, w, h in candidates:
+            im = img.crop((x, y, (x + w), (y + h)))
+            i = i + 1
+            fig.add_subplot(3, 3, i)
+            plt.imshow(im)
+            im.save(os.path.join(r"C:\Users\BULUT\Desktop\tepsi resimleri", i.__str__() + ".jpg"))
+            im = im.resize((width, height), pilimage.ANTIALIAS)
+            im = [np.array(im)]
+            im = np.array(im).reshape(1, width, height, 3)
+            fragmented_images.append(im)
+        plt.show()
+        return fragmented_images
+
+    def delete_supererogator_rect(self, candidates):
+        deleted = set()
+        for rectx in candidates:
+            x, y, w, h = rectx
+            for rect in candidates:
+                if rect != rectx:
+                    x0, y0, w0, h0 = rect
+                    if x0 >= x and (x0 + w0) <= (x + w) and y0 >= y and (y0 + h0) <= (y + h):
+                        if rectx not in deleted:
+                            deleted.add(rectx)
+
+        for i in deleted:
+            candidates.remove(i)
 class DataSinif:
     labelnumber= -1
     sinifname = ""

@@ -2,6 +2,8 @@ import numpy as np
 import tensorflow as tf
 from Datas import Data as data
 import os
+import wx
+
 
 class Model:
     def __init__(self):
@@ -131,11 +133,34 @@ class Model:
         graph = tf.get_default_graph()
 
         y_pred = graph.get_tensor_by_name("y_pred:0")
-        y_true = graph.get_tensor_by_name("y_true:0")
 
         y_test_images = np.zeros((1, 10))
         feed_dict_test = {self.x: x_batch, self.y_true: y_test_images, self.phase: False}
 
         result = self.sess.run(y_pred, feed_dict=feed_dict_test)
 
-        print('Tahmin Sonucu:', result)
+        probability = np.max(result)
+        sinif_one_hot = np.argmax(result, 1)
+
+        sinif_name = self.dt.get_sinif_list()[sinif_one_hot[0]].sinifname
+
+        wx.MessageBox((probability * 100).__str__() + " " + sinif_name, 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
+
+    def test_accuracy_for_tray(self):
+        tray_images = self.dt.get_fragment_tray_images(self.image_height, self.image_width)
+
+        y_pred = tf.get_default_graph().get_tensor_by_name("y_pred:0")
+
+        y_test_images = np.zeros((1, 10))
+        for image in tray_images:
+
+            feed_dict_test = {self.x: image, self.y_true: y_test_images, self.phase: False}
+
+            result = self.sess.run(y_pred, feed_dict=feed_dict_test)
+
+            probability = np.max(result)
+            sinif_one_hot = np.argmax(result, 1)
+
+            sinif_name = self.dt.get_sinif_list()[sinif_one_hot[0]].sinifname
+
+            wx.MessageBox((probability * 100).__str__() + " " + sinif_name, 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)

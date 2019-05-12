@@ -8,9 +8,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b3dc2e1e-9cb0-409a-a12b-ef82259a1c14" name="Default Changelist" comment="drwe">
+      <change afterPath="$PROJECT_DIR$/Datas/SelectiveSearch.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Datas/myselectivesearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Datas/Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Datas/Data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Forms/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Forms/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Models/Model.py" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoints/yemek_tanima.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoints/yemek_tanima.data-00000-of-00001" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoints/yemek_tanima.index" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoints/yemek_tanima.index" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoints/yemek_tanima.meta" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoints/yemek_tanima.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deneme.py" beforeDir="false" afterPath="$PROJECT_DIR$/deneme.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,8 +34,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Models/Model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1046">
-              <caret line="131" lean-forward="true" selection-start-line="131" selection-end-line="131" />
+            <state relative-caret-position="-102">
+              <caret line="90" lean-forward="true" selection-start-line="90" selection-end-line="90" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -39,8 +46,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/deneme.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="20" lean-forward="true" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+            <state relative-caret-position="102">
+              <caret line="12" column="50" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="50" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -48,8 +58,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Datas/Data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="197" column="19" lean-forward="true" selection-start-line="197" selection-start-column="19" selection-end-line="197" selection-end-column="19" />
+            <state relative-caret-position="3502">
+              <caret line="206" selection-start-line="206" selection-end-line="206" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -60,8 +70,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Forms/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="208">
-              <caret line="72" lean-forward="true" selection-start-line="72" selection-end-line="72" />
+            <state relative-caret-position="34">
+              <caret line="7" selection-start-line="7" selection-end-line="7" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -72,11 +82,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Forms/frmSinifEkle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
+            <state relative-caret-position="714">
               <caret line="43" column="25" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
-              <folding>
-                <element signature="e#1#23#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -84,8 +91,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Forms/frmTestImage.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="46" column="27" selection-start-line="46" selection-start-column="27" selection-end-line="46" selection-end-column="27" />
+            <state relative-caret-position="119">
+              <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
               </folding>
@@ -127,6 +134,12 @@
       <find>read_test_images</find>
       <find>makeform</find>
       <find>y_true</find>
+      <find>index</find>
+      <find>color</find>
+      <find>pilimage</find>
+      <find>join</find>
+      <find>_extract_regions</find>
+      <find>_felzenszwalb_cython</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -146,14 +159,18 @@
         <option value="$PROJECT_DIR$/Main.py" />
         <option value="$PROJECT_DIR$/Forms/frmSinifEkle.py" />
         <option value="$PROJECT_DIR$/Forms/frmTestImage.py" />
-        <option value="$PROJECT_DIR$/deneme.py" />
-        <option value="$PROJECT_DIR$/Datas/Data.py" />
+        <option value="$USER_HOME$/Programs/Pyton/Lib/site-packages/skimage/color/colorconv.py" />
         <option value="$PROJECT_DIR$/Forms/Main.py" />
         <option value="$PROJECT_DIR$/Models/Model.py" />
+        <option value="$PROJECT_DIR$/Datas/SelectiveSearch.py" />
+        <option value="$PROJECT_DIR$/Datas/myselectivesearch.py" />
+        <option value="$USER_HOME$/Programs/Pyton/Lib/site-packages/skimage/segmentation/_felzenszwalb.py" />
+        <option value="$PROJECT_DIR$/deneme.py" />
+        <option value="$PROJECT_DIR$/Datas/Data.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="10" />
     <option name="y" value="20" />
     <option name="width" value="1346" />
@@ -167,6 +184,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -176,18 +194,26 @@
             </path>
             <path>
               <item name="YemekTanima" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="YemekTanima" type="462c0819:PsiDirectoryNode" />
+              <item name="Datas" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/deneme.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings module-name="YemekTanima" is-module-sdk="true">
+        <option name="myUseModuleSdk" value="true" />
+        <option name="myModuleName" value="YemekTanima" />
+      </console-settings>
+    </option>
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -260,14 +286,37 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="myselectivesearch" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="YemekTanima" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Datas" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Datas/myselectivesearch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
-      <item itemvalue="Python.deneme" />
       <item itemvalue="Python.Main" />
+      <item itemvalue="Python.deneme" />
+      <item itemvalue="Python.myselectivesearch" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.Main" />
         <item itemvalue="Python.deneme" />
+        <item itemvalue="Python.myselectivesearch" />
       </list>
     </recent_temporary>
   </component>
@@ -302,22 +351,23 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49918166" visible="true" weight="0.19494048" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4976415" visible="true" weight="0.19494048" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" sideWeight="0.5008183" side_tool="true" weight="0.21130952" />
+      <window_info id="Favorites" order="2" sideWeight="0.5023585" side_tool="true" weight="0.19494048" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.21440262" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4985119" weight="0.049099836" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.46317512" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4985119" weight="0.3617021" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.13747954" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3289689" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.3289689" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5014881" side_tool="true" weight="0.53846157" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.3289689" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.049099836" />
       <window_info anchor="bottom" id="Inspection Results" order="11" weight="0.3289689" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -372,174 +422,77 @@
           <option name="timeStamp" value="103" />
         </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="x_batch" language="Python" />
-        <watch expression="self.training_images" language="Python" />
-        <watch expression="os.path.split(src.name)[1]" language="Python" />
-        <watch expression="os.path.split(src)[1]" language="Python" />
-        <watch expression="os.path.exists(os.path.join(dest, os.path.split(pathname)[1]))" language="Python" />
-        <watch expression="os.path.split(pathname)[1]" language="Python" />
+        <watch expression="tex_grad[:, :]" language="Python" />
+        <watch expression="img[:, :, 3] " language="Python" />
+        <watch expression="zip(r1[&quot;hist_t&quot;], r2[&quot;hist_t&quot;])" language="Python" />
       </configuration>
     </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
       <expression>
-        <expression-string>os.path.split(pathname)[1]</expression-string>
+        <expression-string>zip(r1[&quot;hist_t&quot;], r2[&quot;hist_t&quot;])</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>os.path.exists(os.path.join(dest, os.path.split(pathname)[1]))</expression-string>
+        <expression-string>img[:, :, 3]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>os.path.split(src.name)[1]</expression-string>
+        <expression-string>tex_grad[:, :]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>os.path.split(src)[1]</expression-string>
+        <expression-string>list(R.items())</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>self.training_images</expression-string>
+        <expression-string>img[:, :, :3]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>x_batch</expression-string>
+        <expression-string>img[:, :, :4]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>self.training_labels</expression-string>
+        <expression-string>hsv[:, :, :][True]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>row[2]</expression-string>
+        <expression-string>hsv[:, :, :][False]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>self.onehotlabel(row[0])</expression-string>
+        <expression-string>[img[:, :, 3] == k]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>siniflist.count()</expression-string>
+        <expression-string>len(masked_pixels / 4)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Outputs/train-00-of-04.tfrecord" />
-    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/tensorflow/python/training/coordinator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-191">
-          <caret line="353" selection-start-line="353" selection-end-line="353" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/tensorflow/python/keras/backend.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57868">
-          <caret line="3446" column="4" selection-start-line="3446" selection-start-column="4" selection-end-line="3446" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/random.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4522">
-          <caret line="274" selection-start-line="274" selection-end-line="274" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/tensorflow/python/keras/engine/training_utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="322" selection-start-line="322" selection-end-line="322" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/tensorflow/python/keras/activations.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="149" column="13" selection-start-line="149" selection-start-column="13" selection-end-line="149" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/tensorflow/python/keras/optimizers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="111">
-          <caret line="596" column="6" selection-start-line="596" selection-start-column="6" selection-end-line="596" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/training.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="149" column="47" selection-start-line="149" selection-start-column="41" selection-end-line="149" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/tensorflow/python/ops/image_ops_impl.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="106">
-          <caret line="941" column="4" selection-start-line="941" selection-start-column="4" selection-end-line="941" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/tensorflow/python/keras/layers/convolutional.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="151" column="47" lean-forward="true" selection-start-line="151" selection-start-column="47" selection-end-line="151" selection-end-column="47" />
-          <folding>
-            <element signature="e#755#793#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/PIL/Image.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44183">
-          <caret line="2604" column="12" selection-start-line="2604" selection-start-column="12" selection-end-line="2604" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/numpy/core/numeric.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="537" selection-start-line="537" selection-end-line="537" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/tensorflow/python/ops/gen_nn_ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="1102" column="11" lean-forward="true" selection-start-line="1102" selection-start-column="11" selection-end-line="1102" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mnist.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="6" selection-start-line="11" selection-end-line="11" selection-end-column="6" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Downloads/cifar10.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-255">
@@ -636,13 +589,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/tensorflow/python/framework/ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="1791" selection-start-line="1791" selection-end-line="1791" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/tensorflow/python/framework/op_def_library.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="400">
@@ -657,13 +603,6 @@
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.3/system/python_stubs/1646556212/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="5249" column="8" selection-start-line="5249" selection-start-column="8" selection-end-line="5249" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -743,43 +682,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Forms/frmTestImage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="46" column="27" selection-start-line="46" selection-start-column="27" selection-end-line="46" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Forms/frmSinifEkle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="43" column="25" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
-          <folding>
-            <element signature="e#1#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/deneme.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="20" lean-forward="true" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Datas/Data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="197" column="19" lean-forward="true" selection-start-line="197" selection-start-column="19" selection-end-line="197" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/tensorflow/python/client/session.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="329">
@@ -787,20 +689,181 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/images/Dürüm/object-detection-tutorial-pic.py" />
+    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/numpy/core/multiarray.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="557">
+          <caret line="157" column="24" selection-start-line="157" selection-start-column="12" selection-end-line="157" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.3/system/python_stubs/1646556212/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75378">
+          <caret line="4434" column="8" selection-start-line="4434" selection-start-column="8" selection-end-line="4434" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/skimage/io/manage_plugins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-21">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/skimage/io/_io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="61" column="19" selection-start-line="61" selection-start-column="19" selection-end-line="61" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/skimage/data/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="69" column="11" lean-forward="true" selection-start-line="69" selection-start-column="11" selection-end-line="69" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/tensorflow/python/framework/ops.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="3489" selection-start-line="3489" selection-end-line="3489" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/skimage/color/colorconv.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="337">
+          <caret line="224" column="4" selection-start-line="224" selection-start-column="4" selection-end-line="224" selection-end-column="4" />
+          <folding>
+            <element signature="e#1979#2010#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/OneDrive/Belgeler/deeplearn/mnist.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-153">
+          <caret line="3" column="62" lean-forward="true" selection-start-line="3" selection-start-column="62" selection-end-line="3" selection-end-column="62" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/skimage/feature/texture.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14">
+          <caret line="275" column="27" lean-forward="true" selection-start-line="275" selection-start-column="27" selection-end-line="275" selection-end-column="27" />
+          <folding>
+            <element signature="e#49#67#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/numpy/lib/histograms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1040">
+          <caret line="666" column="4" selection-start-line="666" selection-start-column="4" selection-end-line="666" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/PIL/Image.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="1968" selection-start-line="1968" selection-end-line="1968" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/skimage/util/dtype.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="73">
+          <caret line="392" column="4" selection-start-line="392" selection-start-column="4" selection-end-line="392" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Programs/Pyton/Lib/site-packages/skimage/segmentation/_felzenszwalb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/deneme.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="12" column="50" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Datas/SelectiveSearch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Datas/myselectivesearch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Forms/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="72" lean-forward="true" selection-start-line="72" selection-end-line="72" />
+        <state relative-caret-position="34">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Forms/frmSinifEkle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="714">
+          <caret line="43" column="25" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Forms/frmTestImage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Datas/Data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3502">
+          <caret line="206" selection-start-line="206" selection-end-line="206" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Models/Model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1046">
-          <caret line="131" lean-forward="true" selection-start-line="131" selection-end-line="131" />
+        <state relative-caret-position="-102">
+          <caret line="90" lean-forward="true" selection-start-line="90" selection-end-line="90" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

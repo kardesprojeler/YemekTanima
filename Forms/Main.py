@@ -31,6 +31,7 @@ class Main(wx.MDIParentFrame):
         menu_model.Append(2001, "Modeli Eğit")
         menu_model.Append(2002, "Modeli Test Et")
         menu_model.Append(2003, "Tahmin Yap")
+        menu_model.Append(2004, "Yemek Tepsisi İçin Tahmin Yap")
 
         menubar.Append(menu_model, "Model")
 
@@ -38,6 +39,7 @@ class Main(wx.MDIParentFrame):
         self.Bind(wx.EVT_MENU, self.train_model, id=2001)
         self.Bind(wx.EVT_MENU, self.test_model, id=2002)
         self.Bind(wx.EVT_MENU, self.test_model_for_one_image, id=2003)
+        self.Bind(wx.EVT_MENU, self.test_model_for_tray, id=2004)
 
         menu_model = wx.Menu()
         menu_model.Append(3000, "Hakkımızda")
@@ -71,6 +73,8 @@ class Main(wx.MDIParentFrame):
     def test_model_for_one_image(self, evt):
         self.model.test_accuracy_for_one_image()
 
+    def test_model_for_tray(self, evt):
+        self.model.test_accuracy_for_tray()
 
 if __name__ == '__main__':
     app = wx.App()
