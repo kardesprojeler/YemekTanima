@@ -201,7 +201,7 @@ class Data:
             file_content = pilimage.open(pathname)
             im = file_content.resize((width, height), pilimage.ANTIALIAS)
             im = [np.array(im)]
-            im = np.array(im).reshape((-1, width, height))
+            im = np.array(im).reshape((-1, width, height, 3))
 
             return im
 
