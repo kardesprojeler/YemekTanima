@@ -181,4 +181,4 @@ class Model:
             wx.MessageBox((probability * 100).__str__() + " " + sinif_name, 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
 
         wx.MessageBox('Toplam Fiyat: ' + toplam_fiyat.__str__(), 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
->>>>>>> 3a007f1799aae5a4e2cbeca31a6c08a20ea39dd9
+
