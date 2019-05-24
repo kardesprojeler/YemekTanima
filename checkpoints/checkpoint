@@ -1,0 +1,2 @@
+model_checkpoint_path: "yemek_tanima"
+all_model_checkpoint_paths: "yemek_tanima"
