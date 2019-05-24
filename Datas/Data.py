@@ -1,4 +1,4 @@
-import pyodbc as odbc
+from pyodbc import connect
 from tkinter import messagebox
 
 conn_str = (
@@ -9,7 +9,7 @@ conn_str = (
     )
 
 class Data:
-    cnxn = odbc.connect(conn_str)
+    cnxn = connect(conn_str)
     cursor = cnxn.cursor()
     datasiniflist = []
 
@@ -41,7 +41,8 @@ class Data:
                                 "values(?, ?, ?, ?)", 3, labelnumber, sinifname, foldername)
             Data.cnxn.commit()
             pass
-        pass
+        pa
+        ss
     pass
 class DataSinif:
     ref = -1
