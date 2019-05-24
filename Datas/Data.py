@@ -7,7 +7,6 @@ from PIL import Image as pilimage
 import tensorflow as tf
 import wx
 import Datas.SelectiveSearch as selectivesearch
-import cv2
 import matplotlib.pyplot as plt
 
 fields = 'Sınıf İsmi', 'Klasör İsmi'
@@ -33,9 +32,10 @@ class Data:
         row = self.cursor.fetchone()
         while row:
             sinif = DataSinif()
-            sinif.labelnumber = row[0]
+            sinif.id = row[0]
             sinif.sinifname = row[1]
             sinif.foldername = row[2]
+            sinif.fiyat = row[3]
             array.append(sinif)
             row = self.cursor.fetchone()
         return array
@@ -67,8 +67,8 @@ class Data:
     def read_test_images(self, heigh, width):
         siniflist = self.get_sinif_list()
         for sinif in siniflist:
-            self.cursor.execute('select labelnumber, foldername, filename from tbl_01_01_'
-                                'testimage a where labelnumber = ?', sinif.labelnumber)
+            self.cursor.execute('select id, foldername, filename from tbl_01_01_'
+                                'testimage a where id = ?', sinif.id)
             row = self.cursor.fetchone()
             while row:
                 path = os.path.join(os.getcwd(), "images", row[1], row[2])
@@ -207,10 +207,10 @@ class Data:
 
     def fragment_tray_image(self, path, height, width):
         img = pilimage.open(path)
-        img = img.resize((500, 500), pilimage.ANTIALIAS)
+        img = img.resize((250, 250), pilimage.ANTIALIAS)
         im = np.asarray(img, dtype='uint8')
         img_lbl, regions = selectivesearch.selective_search(
-            im, scale=300, sigma=2, min_size=6)
+            im, scale=1, sigma=0.8, min_size=50)
 
         candidates = set()
         for r in regions:
@@ -218,7 +218,7 @@ class Data:
             if r['rect'] in candidates:
                 continue
             # excluding regions smaller than 2000 pixels
-            if r['size'] < 2000:
+            if r['size'] < 1000:
                 continue
             x, y, w, h = r['rect']
             if w / h > 1.2 or h / w > 1.2:
@@ -232,12 +232,12 @@ class Data:
         for x, y, w, h in candidates:
             im = img.crop((x, y, (x + w), (y + h)))
             i = i + 1
-            fig.add_subplot(3, 3, i)
+            fig.add_subplot(6, 6, i)
             plt.imshow(im)
-            im.save(os.path.join(r"C:\Users\BULUT\Desktop\tepsi resimleri", i.__str__() + ".jpg"))
+            im.save(os.path.join(r"C:\Users\BULUT\Desktop", "indir(1).jpg"))
             im = im.resize((width, height), pilimage.ANTIALIAS)
             im = [np.array(im)]
-            im = np.array(im).reshape(1, width, height, 3)
+            im = np.array(im).reshape((-1, width, height, 3))
             fragmented_images.append(im)
         plt.show()
         return fragmented_images
@@ -256,7 +256,8 @@ class Data:
         for i in deleted:
             candidates.remove(i)
 class DataSinif:
-    labelnumber= -1
+    id = -1
     sinifname = ""
-    foldername=""
+    foldername = ""
+    fiyat = 0
     pass

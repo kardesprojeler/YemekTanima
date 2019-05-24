@@ -8,17 +8,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b3dc2e1e-9cb0-409a-a12b-ef82259a1c14" name="Default Changelist" comment="drwe">
-      <change afterPath="$PROJECT_DIR$/Datas/SelectiveSearch.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Datas/myselectivesearch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Datas/Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Datas/Data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Forms/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Forms/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Models/Model.py" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoints/yemek_tanima.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoints/yemek_tanima.data-00000-of-00001" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoints/yemek_tanima.index" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoints/yemek_tanima.index" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoints/yemek_tanima.meta" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoints/yemek_tanima.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deneme.py" beforeDir="false" afterPath="$PROJECT_DIR$/deneme.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Dolma/images (31).jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Dolma/images (37).jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Dolma/images (38).jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Dolma/images (39).jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Dolma/images (46).jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Dolma/images (50).jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Dolma/images (7).jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Dolma/images (8).jpg" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -34,22 +35,35 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Models/Model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-102">
-              <caret line="90" lean-forward="true" selection-start-line="90" selection-end-line="90" />
+            <state relative-caret-position="289">
+              <caret line="66" column="20" lean-forward="true" selection-start-line="66" selection-start-column="20" selection-end-line="66" selection-end-column="20" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#141#162#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/deneme.py">
+        <entry file="file://$PROJECT_DIR$/Datas/SelectiveSearch.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="12" column="50" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="50" />
+            <state relative-caret-position="323">
+              <caret line="19" column="20" lean-forward="true" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
+                <element signature="e#0#31#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Datas/myselectivesearch.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="544">
+              <caret line="40" selection-start-line="40" selection-end-line="40" />
+              <folding>
+                <element signature="e#0#17#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -58,8 +72,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Datas/Data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3502">
-              <caret line="206" selection-start-line="206" selection-end-line="206" />
+            <state relative-caret-position="199">
+              <caret line="236" column="42" lean-forward="true" selection-start-line="236" selection-start-column="42" selection-end-line="236" selection-end-column="42" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -70,11 +84,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Forms/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="7" selection-start-line="7" selection-end-line="7" />
-              <folding>
-                <element signature="e#0#14#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="952">
+              <caret line="60" column="38" selection-start-line="60" selection-start-column="38" selection-end-line="60" selection-end-column="38" />
             </state>
           </provider>
         </entry>
@@ -111,8 +122,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>foldername</find>
-      <find>addfile</find>
       <find>build</find>
       <find>Flatten</find>
       <find>Flags.</find>
@@ -140,6 +149,9 @@
       <find>join</find>
       <find>_extract_regions</find>
       <find>_felzenszwalb_cython</find>
+      <find>messagebox</find>
+      <find>labelnumber</find>
+      <find>get_fragment</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -160,17 +172,17 @@
         <option value="$PROJECT_DIR$/Forms/frmSinifEkle.py" />
         <option value="$PROJECT_DIR$/Forms/frmTestImage.py" />
         <option value="$USER_HOME$/Programs/Pyton/Lib/site-packages/skimage/color/colorconv.py" />
-        <option value="$PROJECT_DIR$/Forms/Main.py" />
-        <option value="$PROJECT_DIR$/Models/Model.py" />
         <option value="$PROJECT_DIR$/Datas/SelectiveSearch.py" />
         <option value="$PROJECT_DIR$/Datas/myselectivesearch.py" />
         <option value="$USER_HOME$/Programs/Pyton/Lib/site-packages/skimage/segmentation/_felzenszwalb.py" />
         <option value="$PROJECT_DIR$/deneme.py" />
+        <option value="$PROJECT_DIR$/Forms/Main.py" />
         <option value="$PROJECT_DIR$/Datas/Data.py" />
+        <option value="$PROJECT_DIR$/Models/Model.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="10" />
     <option name="y" value="20" />
     <option name="width" value="1346" />
@@ -191,11 +203,6 @@
             <path>
               <item name="YemekTanima" type="b2602c69:ProjectViewProjectNode" />
               <item name="YemekTanima" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="YemekTanima" type="b2602c69:ProjectViewProjectNode" />
-              <item name="YemekTanima" type="462c0819:PsiDirectoryNode" />
-              <item name="Datas" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -351,23 +358,22 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4976415" visible="true" weight="0.19494048" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4976415" visible="true" weight="0.19494048" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5023585" side_tool="true" weight="0.19494048" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.46317512" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4985119" weight="0.3617021" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3878887" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4985119" weight="0.36006546" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.13747954" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3289689" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.3289689" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5014881" side_tool="true" weight="0.53846157" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.049099836" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.28805238" />
       <window_info anchor="bottom" id="Inspection Results" order="11" weight="0.3289689" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -795,20 +801,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/deneme.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="12" column="50" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="50" />
+        <state relative-caret-position="510">
+          <caret line="33" column="50" selection-start-line="33" selection-start-column="50" selection-end-line="33" selection-end-column="50" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Datas/SelectiveSearch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -825,11 +821,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Forms/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="952">
+          <caret line="60" column="38" selection-start-line="60" selection-start-column="38" selection-end-line="60" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -852,20 +845,31 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Datas/Data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3502">
-          <caret line="206" selection-start-line="206" selection-end-line="206" />
+        <state relative-caret-position="199">
+          <caret line="236" column="42" lean-forward="true" selection-start-line="236" selection-start-column="42" selection-end-line="236" selection-end-column="42" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Datas/SelectiveSearch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="20" lean-forward="true" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Models/Model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
-          <caret line="90" lean-forward="true" selection-start-line="90" selection-end-line="90" />
+        <state relative-caret-position="289">
+          <caret line="66" column="20" lean-forward="true" selection-start-line="66" selection-start-column="20" selection-end-line="66" selection-end-column="20" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#141#162#0" />
           </folding>
         </state>
       </provider>

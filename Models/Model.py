@@ -4,7 +4,6 @@ from Datas import Data as data
 import os
 import wx
 
-
 class Model:
     def __init__(self):
         self.dt = data.Data()
@@ -25,6 +24,9 @@ class Model:
     save_path = ''
     global_step = tf.Variable(0, trainable=False)
     saver = None
+
+    def is_model_prepared(self):
+            return self.sess is not None
 
     def global_variable_initializer(self):
         checkpoint_path = 'checkpoints/'
@@ -64,7 +66,7 @@ class Model:
         logits = self.fc_layer(fc2, 256, self.num_class, scope='fc_out', use_relu=False, batch_normalization=False)
         y = tf.nn.softmax(logits, name="y_pred")
 
-        xent = tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=self.y_true)
+        xent = tf.nn.softmax_cross_entropy_with_logits_v2(logits=logits, labels=self.y_true)
         self.loss = tf.reduce_mean(xent)
 
         correct_predict = tf.equal(tf.argmax(y, 1), tf.argmax(self.y_true, 1))
@@ -80,7 +82,6 @@ class Model:
         b = tf.Variable(tf.constant(0.1, shape=[output_size]))
 
         conv = tf.nn.conv2d(input, w, strides=[1, 1, 1, 1], padding='SAME')
-
         conv_bn = self.batch_normalization(conv, self.phase, scope)
         y = tf.nn.relu(conv_bn)
 
@@ -150,7 +151,7 @@ class Model:
         tray_images = self.dt.get_fragment_tray_images(self.image_height, self.image_width)
 
         y_pred = tf.get_default_graph().get_tensor_by_name("y_pred:0")
-
+        toplam_fiyat = 0
         y_test_images = np.zeros((1, 10))
         for image in tray_images:
 
@@ -162,5 +163,8 @@ class Model:
             sinif_one_hot = np.argmax(result, 1)
 
             sinif_name = self.dt.get_sinif_list()[sinif_one_hot[0]].sinifname
+            toplam_fiyat += self.dt.get_sinif_list()[sinif_one_hot[0]].fiyat
 
             wx.MessageBox((probability * 100).__str__() + " " + sinif_name, 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
+
+        wx.MessageBox('Toplam Fiyat: ' + toplam_fiyat.__str__(), 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)

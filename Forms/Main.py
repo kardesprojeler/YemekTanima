@@ -1,4 +1,3 @@
-import tkinter
 from Models import Model as model
 from Datas import Data as data
 import wx
@@ -49,18 +48,27 @@ class Main(wx.MDIParentFrame):
 
     def make_model(self, evt):
         #self.labelText.set('Model Oluşturuluyor...')
-        self.model.make_model()
-        wx.MessageBox('Model Oluşturuldu', 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
+        if not self.model.is_model_prepared():
+            self.model.make_model()
+            wx.MessageBox('Model Oluşturuldu', 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
+        else:
+            wx.MessageBox('Oluşturulmuş Bir Model Mevcut!', 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
 
     def train_model(self, evt):
         #self.status_label.config(text='Model Eğitiliyor...')
         #self.labelText.set('Model Eğitiliyor...')
-        self.model.train_step(400)
+        if self.model.is_model_prepared():
+            self.model.train_step(400)
+        else:
+            wx.MessageBox('Model Oluşturulmamış!', 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
+
         #self.labelText.set('Eğitim Tamamlandı')
 
     def test_model(self, evt):
-        self.model.test_accuracy()
-        pass
+        if self.model.is_model_prepared():
+            self.model.test_accuracy()
+        else:
+            wx.MessageBox('Model Oluşturulmamış!', 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
 
     def add_data_sinif(self, evt):
         form = frmSinif.frmSinifEkle(self)
@@ -71,10 +79,17 @@ class Main(wx.MDIParentFrame):
         form.Show(True)
 
     def test_model_for_one_image(self, evt):
-        self.model.test_accuracy_for_one_image()
+        if self.model.is_model_prepared():
+            self.model.test_accuracy_for_one_image()
+        else:
+            wx.MessageBox('Model Oluşturulmamış!', 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
 
     def test_model_for_tray(self, evt):
-        self.model.test_accuracy_for_tray()
+        if self.model.is_model_prepared():
+            self.model.test_accuracy_for_tray()
+        else:
+            wx.MessageBox('Model Oluşturulmamış!', 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
+
 
 if __name__ == '__main__':
     app = wx.App()
