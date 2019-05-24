@@ -28,8 +28,6 @@ class Model:
     def is_model_prepared(self):
             return self.sess is not None
 
-<<<<<<< HEAD
-
 
 #model = keras.Sequential([
  #   keras.layers.Flatten(input_shape=(28, 28)),
@@ -40,7 +38,6 @@ class Model:
               #loss='sparse_categorical_crossentropy',
               #metrics=['accuracy'])
 
-=======
     def global_variable_initializer(self):
         checkpoint_path = 'checkpoints/'
         if not os.path.exists(checkpoint_path):

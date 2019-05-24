@@ -1,7 +1,7 @@
-<<<<<<< HEAD
+
 from pyodbc import connect
 from tkinter import messagebox
-=======
+
 import pyodbc as odbc
 from tkinter import messagebox, filedialog, ttk
 import shutil
@@ -12,7 +12,7 @@ import tensorflow as tf
 import wx
 import Datas.SelectiveSearch as selectivesearch
 import matplotlib.pyplot as plt
->>>>>>> 3a007f1799aae5a4e2cbeca31a6c08a20ea39dd9
+
 
 fields = 'Sınıf İsmi', 'Klasör İsmi'
 conn_str = (
@@ -64,8 +64,8 @@ class Data:
                 pass
             row = Data.cursor.fetchone()
             pass
-        Data.training_images = np.array([i for i in Data.training_images]).reshape(len(Data.training_images), heigh,
-                                                                                   width, 3)
+        Data.training_images = np.array([i for i in Data.training_images]).reshape((len(Data.training_images), heigh,
+                                                                                   width, 3))
         return self.training_images, self.training_labels
         pass
 
@@ -99,13 +99,8 @@ class Data:
             self.cursor.execute("insert into tbl_01_01_sinif(sinifname, foldername) " +
                                 "values(?, ?)", sinifname, foldername)
             self.cnxn.commit()
-            pass
-<<<<<<< HEAD
-        pa
-        ss
-    pass
-=======
         pass
+
     def getsinifcount(self):
         self.cursor.execute("select sinifcount = count(*) from tbl_01_01_sinif")
         row = self.cursor.fetchone()
@@ -203,7 +198,7 @@ class Data:
             file_content = pilimage.open(pathname)
             im = file_content.resize((width, height), pilimage.ANTIALIAS)
             im = [np.array(im)]
-            im = np.array(im).reshape(1, width, height, 3)
+            im = np.array(im).reshape((-1, width, height, 3))
 
             return im
 
@@ -265,7 +260,8 @@ class Data:
 
         for i in deleted:
             candidates.remove(i)
->>>>>>> 3a007f1799aae5a4e2cbeca31a6c08a20ea39dd9
+
+
 class DataSinif:
     id = -1
     sinifname = ""
