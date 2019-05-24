@@ -28,8 +28,6 @@ class Model:
     def is_model_prepared(self):
             return self.sess is not None
 
-<<<<<<< HEAD
-
 
 #model = keras.Sequential([
  #   keras.layers.Flatten(input_shape=(28, 28)),
@@ -40,7 +38,6 @@ class Model:
               #loss='sparse_categorical_crossentropy',
               #metrics=['accuracy'])
 
-=======
     def global_variable_initializer(self):
         checkpoint_path = 'checkpoints/'
         if not os.path.exists(checkpoint_path):
@@ -181,4 +178,3 @@ class Model:
             wx.MessageBox((probability * 100).__str__() + " " + sinif_name, 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
 
         wx.MessageBox('Toplam Fiyat: ' + toplam_fiyat.__str__(), 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
->>>>>>> 3a007f1799aae5a4e2cbeca31a6c08a20ea39dd9

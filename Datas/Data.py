@@ -1,7 +1,7 @@
-<<<<<<< HEAD
+
 from pyodbc import connect
 from tkinter import messagebox
-=======
+
 import pyodbc as odbc
 from tkinter import messagebox, filedialog, ttk
 import shutil
@@ -12,7 +12,6 @@ import tensorflow as tf
 import wx
 import Datas.SelectiveSearch as selectivesearch
 import matplotlib.pyplot as plt
->>>>>>> 3a007f1799aae5a4e2cbeca31a6c08a20ea39dd9
 
 fields = 'Sınıf İsmi', 'Klasör İsmi'
 conn_str = (
@@ -100,12 +99,10 @@ class Data:
                                 "values(?, ?)", sinifname, foldername)
             self.cnxn.commit()
             pass
-<<<<<<< HEAD
-        pa
-        ss
-    pass
-=======
         pass
+    pass
+
+
     def getsinifcount(self):
         self.cursor.execute("select sinifcount = count(*) from tbl_01_01_sinif")
         row = self.cursor.fetchone()
@@ -128,6 +125,7 @@ class Data:
             wx.MessageBox('Alanları doldurunuz!', 'Attention', wx.OK | wx.ICON_WARNING)
             pass
         pass
+
 
     def add_training_file(self):
         src = filedialog.askopenfile()
@@ -203,7 +201,7 @@ class Data:
             file_content = pilimage.open(pathname)
             im = file_content.resize((width, height), pilimage.ANTIALIAS)
             im = [np.array(im)]
-            im = np.array(im).reshape(1, width, height, 3)
+            im = np.array(im).reshape((-1, width, height))
 
             return im
 
@@ -265,7 +263,7 @@ class Data:
 
         for i in deleted:
             candidates.remove(i)
->>>>>>> 3a007f1799aae5a4e2cbeca31a6c08a20ea39dd9
+
 class DataSinif:
     id = -1
     sinifname = ""
