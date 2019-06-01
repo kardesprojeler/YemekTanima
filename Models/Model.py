@@ -28,16 +28,6 @@ class Model:
     def is_model_prepared(self):
             return self.sess is not None
 
-
-#model = keras.Sequential([
- #   keras.layers.Flatten(input_shape=(28, 28)),
-  #  keras.layers.Dense(128, activation=tf.nn.relu),
-   # keras.layers.Dense(10, activation=tf.nn.softmax)
-#])
-#model.compile(optimizer='adam',
-              #loss='sparse_categorical_crossentropy',
-              #metrics=['accuracy'])
-
     def global_variable_initializer(self):
         checkpoint_path = 'checkpoints/'
         if not os.path.exists(checkpoint_path):
@@ -51,7 +41,7 @@ class Model:
             self.saver.restore(self.sess, save_path=latest_checkpoint)
         except:
             print("Checkpoint bulunamadı")
-            self.sess.run(tf.global_variables_initializer())
+            self.sess.run()
 
     def batch_normalization(self, input, phase, scope):
         return tf.cond(phase,

@@ -1,74 +1,20 @@
-<<<<<<< HEAD
-from django.forms import ModelForm
-from models import *
- class Meta:
-  model = Doktor
-                fields = ['adi','soyadi','yas','telefon','eposta']
- def clean_telefon(self):
-  tel = self.cleaned_data['telefon']
-  if tel != "":
-   if len(tel) != 11:
-    raise forms.ValidationError('Telefon numarasi 11 karakter olmalidir.')
-  return tel
-=======
 import cv2
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-import Datas.SelectiveSearch as selectivesearch
-import skimage.data
 import numpy as np
-from PIL import Image as pilimage
 
-def main():
+img = cv2.imread(r'C:\Users\BULUT\Desktop\indir.jpg', 0)
+img = cv2.medianBlur(img, 5)
+cimg = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
 
-    # loading astronaut image
-    im = pilimage.open(r'C:\Users\BULUT\Desktop\IMG-20190313-WA0000.jpg')
-    im = im.resize((500, 500), pilimage.ANTIALIAS)
-    im = np.asarray(im, dtype='uint8')
+circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 3, 100, param1=100, param2=60, minRadius=10, maxRadius=100)
 
-    img_lbl, regions = selectivesearch.selective_search(
-        im, scale=300, sigma=2, min_size=100)
+circles = np.uint16(np.around(circles))
+for i in circles[0, :]:
+    # draw the outer circle
+    cv2.circle(cimg, (i[0], i[1]), i[2], (0, 255, 0), 2)
+    # draw the center of the circle
+    cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 2)
 
-    candidates = set()
-    for r in regions:
-        # excluding same rectangle (with different segments)
-        if r['rect'] in candidates:
-            continue
-        # excluding regions smaller than 2000 pixels
-        if r['size'] < 2000:
-            continue
-        # distorted rects
-        x, y, w, h = r['rect']
-        if w / h > 1.2 or h / w > 1.2:
-            continue
-        candidates.add(r['rect'])
-    delete_supererogator_rect(candidates)
-    # draw rectangles on the original image
-    fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(6, 6))
-    ax.imshow(im)
-    for x, y, w, h in candidates:
-        print(x, y, w, h)
-        rect = mpatches.Rectangle(
-            (x, y), w, h, fill=False, edgecolor='red', linewidth=1)
-        ax.add_patch(rect)
-
-    plt.show()
-
-def delete_supererogator_rect(candidates):
-    deleted = set()
-    for rectx in candidates:
-        x, y, w, h = rectx
-        for rect in candidates:
-            if rect != rectx:
-                x0, y0, w0, h0 = rect
-                if x0 >= x and (x0 + w0) <= (x + w) and y0 >= y and (y0 + h0) <= (y + h):
-                    if rectx not in deleted:
-                        deleted.add(rectx)
-
-
-    for i in deleted:
-        candidates.remove(i)
-
-if __name__ == "__main__":
-    main()
->>>>>>> 3a007f1799aae5a4e2cbeca31a6c08a20ea39dd9
+cv2.imshow('detected circles', cimg)
+cv2.imshow('res', img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

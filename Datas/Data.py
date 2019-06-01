@@ -1,18 +1,18 @@
 
-from pyodbc import connect
-from tkinter import messagebox
-
-import pyodbc as odbc
-from tkinter import messagebox, filedialog, ttk
-import shutil
 import os
+import shutil
+from pyodbc import connect
+from tkinter import messagebox, filedialog
+
+import matplotlib.pyplot as plt
 import numpy as np
-from PIL import Image as pilimage
 import tensorflow as tf
 import wx
-import Datas.SelectiveSearch as selectivesearch
-import matplotlib.pyplot as plt
+from PIL import Image as pilimage
+from absl import flags
+FLAGS = flags.FLAGS
 
+import Datas.SelectiveSearch as selectivesearch
 
 fields = 'Sınıf İsmi', 'Klasör İsmi'
 conn_str = (
@@ -21,6 +21,64 @@ conn_str = (
     r'DATABASE=YemekTanima;'
     r'Trusted_Connection=yes;'
     )
+
+def define_densenet_flags():
+  """Defining all the necessary flags."""
+  flags.DEFINE_integer('buffer_size', 50000, 'Shuffle buffer size')
+  flags.DEFINE_integer('batch_size', 64, 'Batch Size')
+  flags.DEFINE_integer('epochs', 1, 'Number of epochs')
+  flags.DEFINE_boolean('enable_function', True, 'Enable Function?')
+  flags.DEFINE_string('data_dir', None, 'Directory to store the dataset')
+  flags.DEFINE_string('mode', 'from_depth', 'Deciding how to build the model')
+  flags.DEFINE_integer('depth_of_model', 7, 'Number of layers in the model')
+  flags.DEFINE_integer('growth_rate', 12, 'Filters to add per dense block')
+  flags.DEFINE_integer('num_of_blocks', 3, 'Number of dense blocks')
+  flags.DEFINE_integer('output_classes', 10, 'Number of classes in the dataset')
+  flags.DEFINE_integer('num_layers_in_each_block', -1,
+                       'Number of layers in each dense block')
+  flags.DEFINE_string('data_format', 'channels_last',
+                      'channels_last or channels_first')
+  flags.DEFINE_boolean('bottleneck', True,
+                       'Add bottleneck blocks between layers')
+  flags.DEFINE_float(
+      'compression', 0.5,
+      'reducing the number of inputs(filters) to the transition block.')
+  flags.DEFINE_float('weight_decay', 1e-4, 'weight decay')
+  flags.DEFINE_float('dropout_rate', 0., 'dropout rate')
+  flags.DEFINE_boolean(
+      'pool_initial', False,
+      'If True add a conv => maxpool block at the start. Used for Imagenet')
+  flags.DEFINE_boolean('include_top', True, 'Include the classifier layer')
+  flags.DEFINE_string('train_mode', 'custom_loop',
+                      'Use either "keras_fit" or "custom_loop"')
+
+def flags_dict():
+  """Define the flags.
+  Returns:
+    Command line arguments as Flags.
+  """
+
+  kwargs = {
+      'epochs': FLAGS.epochs,
+      'enable_function': FLAGS.enable_function,
+      'buffer_size': FLAGS.buffer_size,
+      'batch_size': FLAGS.batch_size,
+      'mode': FLAGS.mode,
+      'depth_of_model': FLAGS.depth_of_model,
+      'growth_rate': FLAGS.growth_rate,
+      'num_of_blocks': FLAGS.num_of_blocks,
+      'output_classes': FLAGS.output_classes,
+      'num_layers_in_each_block': FLAGS.num_layers_in_each_block,
+      'data_format': FLAGS.data_format,
+      'bottleneck': FLAGS.bottleneck,
+      'compression': FLAGS.compression,
+      'weight_decay': FLAGS.weight_decay,
+      'dropout_rate': FLAGS.dropout_rate,
+      'pool_initial': FLAGS.pool_initial,
+      'include_top': FLAGS.include_top,
+      'train_mode': FLAGS.train_mode
+  }
+  return kwargs
 
 class Data:
     cnxn = connect(conn_str)
@@ -84,8 +142,8 @@ class Data:
                     self.test_images.append([np.array(im)])
                 row = Data.cursor.fetchone()
             pass
-        self.test_images = np.array([i for i in self.test_images]).reshape(len(self.test_images), heigh,
-                                                                           width, 3)
+        self.test_images = np.array([i for i in self.test_images]).reshape((len(self.test_images), heigh,
+                                                                           width, 3))
         return self.test_images, self.test_labels
 
     def insertsinif(self, sinifname, foldername):
