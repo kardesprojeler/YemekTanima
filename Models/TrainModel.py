@@ -6,6 +6,7 @@ from absl import app
 from Models.DenseNet import DenseNet
 from Datas.Data import *
 import tensorflow as tf
+from Datas.Utils import *
 
 class Train(object):
   """Train class.
