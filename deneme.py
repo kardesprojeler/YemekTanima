@@ -1,74 +1,34 @@
-<<<<<<< HEAD
-from django.forms import ModelForm
-from models import *
- class Meta:
-  model = Doktor
-                fields = ['adi','soyadi','yas','telefon','eposta']
- def clean_telefon(self):
-  tel = self.cleaned_data['telefon']
-  if tel != "":
-   if len(tel) != 11:
-    raise forms.ValidationError('Telefon numarasi 11 karakter olmalidir.')
-  return tel
-=======
-import cv2
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-import Datas.SelectiveSearch as selectivesearch
-import skimage.data
 import numpy as np
-from PIL import Image as pilimage
-
-def main():
-
-    # loading astronaut image
-    im = pilimage.open(r'C:\Users\BULUT\Desktop\IMG-20190313-WA0000.jpg')
-    im = im.resize((500, 500), pilimage.ANTIALIAS)
-    im = np.asarray(im, dtype='uint8')
-
-    img_lbl, regions = selectivesearch.selective_search(
-        im, scale=300, sigma=2, min_size=100)
-
-    candidates = set()
-    for r in regions:
-        # excluding same rectangle (with different segments)
-        if r['rect'] in candidates:
-            continue
-        # excluding regions smaller than 2000 pixels
-        if r['size'] < 2000:
-            continue
-        # distorted rects
-        x, y, w, h = r['rect']
-        if w / h > 1.2 or h / w > 1.2:
-            continue
-        candidates.add(r['rect'])
-    delete_supererogator_rect(candidates)
-    # draw rectangles on the original image
-    fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(6, 6))
-    ax.imshow(im)
-    for x, y, w, h in candidates:
-        print(x, y, w, h)
-        rect = mpatches.Rectangle(
-            (x, y), w, h, fill=False, edgecolor='red', linewidth=1)
-        ax.add_patch(rect)
-
-    plt.show()
-
-def delete_supererogator_rect(candidates):
-    deleted = set()
-    for rectx in candidates:
-        x, y, w, h = rectx
-        for rect in candidates:
-            if rect != rectx:
-                x0, y0, w0, h0 = rect
-                if x0 >= x and (x0 + w0) <= (x + w) and y0 >= y and (y0 + h0) <= (y + h):
-                    if rectx not in deleted:
-                        deleted.add(rectx)
+# import the necessary packages
+import argparse
+import glob
+import cv2
 
 
-    for i in deleted:
-        candidates.remove(i)
+def auto_canny(image, sigma=0.33):
+    # compute the median of the single channel pixel intensities
+    v = np.median(image)
 
-if __name__ == "__main__":
-    main()
->>>>>>> 3a007f1799aae5a4e2cbeca31a6c08a20ea39dd9
+    # apply automatic Canny edge detection using the computed median
+    lower = int(max(0, (1.0 - sigma) * v))
+    upper = int(min(255, (1.0 + sigma) * v))
+    edged = cv2.Canny(image, lower, upper)
+
+    # return the edged image
+    return edged
+
+# construct the argument parse and parse the arguments
+# loop over the images
+image = cv2.imread(r'‪C:\Users\Durkan\Desktop\durkan.jpg')
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+blurred = cv2.GaussianBlur(gray, (3, 3), 0)
+
+# apply Canny edge detection using a wide threshold, tight
+# threshold, and automatically determined threshold
+tight = cv2.Canny(blurred, 300, 400)
+auto = auto_canny(tight)
+
+# show the images
+cv2.imshow("Original", image)
+cv2.imshow("Edges", np.hstack([tight, auto]))
+cv2.waitKey(0)
