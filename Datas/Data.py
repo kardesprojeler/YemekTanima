@@ -17,9 +17,9 @@ import Datas.SelectiveSearch as selectivesearch
 fields = 'Sınıf İsmi', 'Klasör İsmi'
 conn_str = (
     r'DRIVER={SQL Server};'
-    r'SERVER=localhost\SQLEXPRESS;'
+    r'SERVER=LAPTOP-1CAUHSG4;'
     r'DATABASE=YemekTanima;'
-    r'Trusted_Connection=yes;'
+    r'Trusted_Connection=True;'
     )
 
 def define_densenet_flags():
