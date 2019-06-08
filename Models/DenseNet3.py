@@ -1,5 +1,5 @@
 from keras.models import Model
-from keras.layers.core import Dense, Dropout, Activation, Reshape, Permute
+from tensorflow.keras.layers.core import Dense, Dropout, Activation, Reshape, Permute
 from keras.layers.convolutional import Conv2D, Conv2DTranspose, ZeroPadding2D
 from keras.layers.pooling import AveragePooling2D, GlobalAveragePooling2D
 from keras.layers import Input, Flatten

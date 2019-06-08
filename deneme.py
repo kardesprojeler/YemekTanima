@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import cv2
 import numpy as np
 
@@ -19,7 +19,7 @@ cv2.imshow('detected circles', cimg)
 cv2.imshow('res', img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-=======
+
 import numpy as np
 # import the necessary packages
 import argparse
@@ -54,4 +54,4 @@ auto = auto_canny(tight)
 cv2.imshow("Original", image)
 cv2.imshow("Edges", np.hstack([tight, auto]))
 cv2.waitKey(0)
->>>>>>> 90a036a4477a1e69bfc33c81034c4f9dab5240d8
+

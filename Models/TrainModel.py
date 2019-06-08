@@ -54,20 +54,27 @@ class Train(object):
             history.history['val_loss'][-1],
             history.history['val_accuracy'][-1])
 
-  def train_step(self, image, label):
+  def train_step(self, image, label, model_name='SimpleModel'):
     """One train step.
     Args:
       image: Batch of images.
       label: corresponding label for the batch of images.
     """
+    loss = None
+    predictions = None
 
-    with tf.GradientTape() as tape:
-      predictions = self.model(image, training=True)
-      loss = self.loss_object(label, predictions)
-      loss += sum(self.model.losses)
-    gradients = tape.gradient(loss, self.model.trainable_variables)
-    self.optimizer.apply_gradients(
-        zip(gradients, self.model.trainable_variables))
+    if model_name == 'SimpleModel':
+        x = self.model.conv1(image)
+        x = self.model.conv2(x)
+        pass
+    elif model_name == 'DenseNet':
+        with tf.GradientTape() as tape:
+            predictions = self.model(image, training=True)
+            loss = self.loss_object(label, predictions)
+            loss += sum(self.model.losses)
+        gradients = tape.gradient(loss, self.model.trainable_variables)
+        self.optimizer.apply_gradients(
+            zip(gradients, self.model.trainable_variables))
 
     self.train_loss_metric(loss)
     self.train_acc_metric(label, predictions)

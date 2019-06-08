@@ -25,7 +25,6 @@ import tensorflow as tf
 
 l2 = tf.keras.regularizers.l2
 
-
 def calc_from_depth(depth, num_blocks, bottleneck):
   """Calculate number of layers in each block from the depth.
   Args:
@@ -141,7 +140,7 @@ class ConvBlock(tf.keras.Model):
                                           kernel_regularizer=l2(weight_decay))
       self.batchnorm2 = tf.keras.layers.BatchNormalization(axis=axis)
 
-  def call(self, x, training=True, **kwargs):
+  def call(self, x, training=True):
     output = self.batchnorm1(x, training=training)
 
     if self.bottleneck:
@@ -178,7 +177,7 @@ class TransitionBlock(tf.keras.Model):
                                        kernel_regularizer=l2(weight_decay))
     self.avg_pool = tf.keras.layers.AveragePooling2D(data_format=data_format)
 
-  def call(self, x, training=True, **kwargs):
+  def call(self, x, training=True):
     output = self.batchnorm(x, training=training)
     output = self.conv(tf.nn.relu(output))
     output = self.avg_pool(output)
@@ -212,7 +211,7 @@ class DenseBlock(tf.keras.Model):
                                    weight_decay,
                                    dropout_rate))
 
-  def call(self, x, training=True, **kwargs):
+  def call(self, x, training=True):
     for i in range(int(self.num_layers)):
       output = self.blocks[i](x, training=training)
       x = tf.concat([x, output], axis=self.axis)
@@ -348,7 +347,7 @@ class DenseNet(tf.keras.Model):
           data_format=self.data_format)
       self.classifier = tf.keras.layers.Dense(self.output_classes)
 
-  def call(self, x, training=True, **kwargs):
+  def call(self, x, training=True):
     output = self.conv1(x)
 
     if self.pool_initial:

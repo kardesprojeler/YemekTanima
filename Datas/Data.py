@@ -17,7 +17,7 @@ import Datas.SelectiveSearch as selectivesearch
 fields = 'Sınıf İsmi', 'Klasör İsmi'
 conn_str = (
     r'DRIVER={SQL Server};'
-    r'SERVER=LAPTOP-1CAUHSG4;'
+    r'SERVER=localhost\SQLEXPRESS;'
     r'DATABASE=YemekTanima;'
     r'Trusted_Connection=True;'
     )
