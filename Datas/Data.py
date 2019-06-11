@@ -17,7 +17,7 @@ import Datas.SelectiveSearch as selectivesearch
 fields = 'Sınıf İsmi', 'Klasör İsmi'
 conn_str = (
     r'DRIVER={SQL Server};'
-    r'SERVER=localhost\SQLEXPRESS;'
+    r'SERVER=LAPTOP-1CAUHSG4;'
     r'DATABASE=YemekTanima;'
     r'Trusted_Connection=True;'
     )
@@ -107,7 +107,7 @@ def onehotlabel(sinif, siniflist):
     label = np.zeros((siniflist.__len__(),), dtype=int)
     finding_index = siniflist.index(sinif)
     label[finding_index] = 1
-    label = tf.reshape(label, [1, siniflist.__len__()])
+    #label = tf.reshape(label, [1, siniflist.__len__()])
     return label
     pass
 

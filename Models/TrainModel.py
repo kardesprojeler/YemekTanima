@@ -7,7 +7,6 @@ from Models.SimpleModel import SimpleModel
 from Datas.Data import *
 from tensorflow.python import keras
 
-
 class Train(object):
   """Train class.
   Args:
@@ -20,9 +19,10 @@ class Train(object):
       self.epochs = epochs
       self.enable_function = enable_function
       self.autotune = tf.data.experimental.AUTOTUNE
-      self.loss_object = tf.losses.SparseCategoricalCrossentropy(from_logits=True)
+      self.loss_object = tf.keras.losses.SparseCategoricalCrossentropy(
+          reduction=tf.keras.losses.Reduction.SUM)
 
-      self.optimizer = keras.optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+      self.optimizer = tf.keras.optimizers.Adam()
       self.train_loss_metric = keras.metrics.Mean(name='train_loss')
       self.train_acc_metric = keras.metrics.SparseCategoricalAccuracy(
           name='train_accuracy')
@@ -51,31 +51,36 @@ class Train(object):
             history.history['val_loss'][-1],
             history.history['val_accuracy'][-1])
 
+  def loss_function(self, real, pred):
+      mask = tf.math.logical_not(tf.math.equal(real, 0))
+      loss_ = tf.nn.softmax_cross_entropy_with_logits(real, pred)
+      mask = tf.cast(mask, dtype=loss_.dtype)
+      loss_ *= mask
+      return tf.reduce_sum(loss_) * 1. / 1
+
   def train_step(self, image, label, model_name='SimpleModel'):
     """One train step.
     Args:
       image: Batch of images.
       label: corresponding label for the batch of images.
     """
-    loss = None
-    predictions = None
-
-    if model_name == 'SimpleModel':
-        predictions = self.model(image)
-        loss = self.loss_object(label, predictions)
-        pass
-    elif model_name == 'DenseNet':
-        predictions = self.model(image, training=True)
-        loss = self.loss_object(label, predictions)
-        loss += sum(self.model.losses)
-        pass
-
-
 
     with tf.GradientTape() as tape:
-        gradients = tape.gradient(loss, self.model.trainable_variables)
-        self.optimizer.apply_gradients(
-            zip(gradients, self.model.trainable_variables))
+        loss = None
+        predictions = None
+
+        if model_name == 'SimpleModel':
+            predictions = self.model(image)
+            loss = self.loss_function(label, predictions)
+            pass
+        elif model_name == 'DenseNet':
+            predictions = self.model(image, training=True)
+            loss = self.loss_object(label, predictions)
+            loss += sum(self.model.losses)
+            pass
+    gradients = tape.gradient(loss, self.model.trainable_variables)
+    self.optimizer.apply_gradients(zip(gradients, self.model.trainable_variables))
+
     self.train_loss_metric(loss)
     self.train_acc_metric(label, predictions)
 
