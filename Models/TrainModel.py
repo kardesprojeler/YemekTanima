@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-
 from absl import app
 from Models.DenseNet import DenseNet
 from Models.SimpleModel import SimpleModel
@@ -21,8 +20,7 @@ class Train(object):
       self.epochs = epochs
       self.enable_function = enable_function
       self.autotune = tf.data.experimental.AUTOTUNE
-      self.loss_object = tf.losses.SparseCategoricalCrossentropy(
-          from_logits=True)
+      self.loss_object = tf.losses.SparseCategoricalCrossentropy(from_logits=True)
 
       self.optimizer = keras.optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
       self.train_loss_metric = keras.metrics.Mean(name='train_loss')

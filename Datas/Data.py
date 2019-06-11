@@ -107,7 +107,7 @@ def onehotlabel(sinif, siniflist):
     label = np.zeros((siniflist.__len__(),), dtype=int)
     finding_index = siniflist.index(sinif)
     label[finding_index] = 1
-    label = label.reshape((1, 10))
+    label = tf.reshape(label, [1, siniflist.__len__()])
     return label
     pass
 
