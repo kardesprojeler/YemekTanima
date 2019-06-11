@@ -1,29 +1,52 @@
 import numpy as np
 import tensorflow as tf
-from Datas import Data as data
+from Datas.Data import *
 import os
 import wx
+from tensorflow.python import keras
 
 
-class SimpleModel:
+class SimpleModel(keras.Model):
     def __init__(self):
-        self.dt = data.Data()
-    image_height = 64
-    image_width = 64
-    image_deep = 3
-    num_class = 0
-    training_images, training_labels = None, None
-    x = None
-    y_true = None
-    accuracy = None
-    sess = None
-    optimizer = None
-    loss = None
-    batch_size = 10
-    phase = tf.placeholder(tf.bool)
-    save_path = ''
-    global_step = tf.Variable(0, trainable=False)
-    saver = None
+        super(SimpleModel, self).__init__()
+        self.l2 = keras.regularizers.l2
+        self.pool_initial = False
+        self.init_filters = (3, 3)
+        self.stride = (1, 1)
+        self.grow_rate = 12
+        self.image_height = 64
+        self.image_width = 64
+        self.image_deep = 3
+        self.num_class = 0
+        self.training_images, training_labels = None, None
+        self.x = None
+        self.y_true = None
+        self.accuracy = None
+        self.sess = None
+        self.optimizer = None
+        self.loss = None
+        self.batch_size = 10
+        self.phase = None
+        self.save_path = ''
+        self.global_step = tf.Variable(0, trainable=False)
+        self.saver = None
+        self.make_model()
+
+
+    def call(self, inputs):
+        inputs = np.array(inputs).reshape((1, 200, 200, 3))
+        x = self.conv1(tf.cast(inputs, tf.float32))
+        x = keras.layers.BatchNormalization(axis=-1)(x)
+        x = self.conv2(x)
+        x = keras.layers.BatchNormalization(axis=-1)(x)
+        x = self.conv3(x)
+        x = keras.layers.BatchNormalization(axis=-1)(x)
+
+        x = self.flattened(x)
+
+        x = self.fc1(x)
+        x = self.fc2(x)
+        return self.fc_out(x)
 
     def is_model_prepared(self):
             return self.sess is not None
@@ -41,68 +64,38 @@ class SimpleModel:
             self.saver.restore(self.sess, save_path=latest_checkpoint)
         except:
             print("Checkpoint bulunamadı")
-            self.sess.run(tf.global_variables_initializer())
+            self.sess.run()
 
-    def batch_normalization(self, input, phase, scope):
-        return tf.cond(phase,
-                       lambda: tf.contrib.layers.batch_norm(input, decay=0.99, is_training=True,
-                                                            updates_collections=None, center=True, scope=scope),
-                       lambda: tf.contrib.layers.batch_norm(input, decay=0.99, is_training=False,
-                                                            updates_collections=None, center=True, scope=scope, reuse=True))
+    def batch_normalization(self, input):
+        return keras.layers.BatchNormalization(input)
 
     def make_model(self):
-        self.num_class = self.dt.getsinifcount()
-        self.x = tf.placeholder(tf.float32, [None, self.image_height, self.image_width, self.image_deep])
-        self.y_true = tf.placeholder(tf.float32, [None, self.num_class], name='y_true')
+        self.num_class = getsinifcount()
 
-        conv1 = self.conv_layer(self.x, self.image_deep, 32, scope='conv1', use_pooling=True)
-        conv2 = self.conv_layer(conv1, 32, 64, scope='conv2', use_pooling=True)
-        conv3 = self.conv_layer(conv2, 64, 64, scope='conv3', use_pooling=True)
+        self.conv1 = self.conv_layer(24)
+        self.conv2 = self.conv_layer(48)
+        self.conv3 = self.conv_layer(24)
 
-        flattened = tf.reshape(conv3, [-1, 8 * 8 * 64])
-        fc1 = self.fc_layer(flattened, 8 * 8 * 64, 512, scope='fc1', use_relu=True, batch_normalization=True)
-        fc2 = self.fc_layer(fc1, 512, 256, scope='fc2', use_relu=True, batch_normalization=True)
+        self.flattened = keras.layers.Flatten()
 
-        logits = self.fc_layer(fc2, 256, self.num_class, scope='fc_out', use_relu=False, batch_normalization=False)
-        y = tf.nn.softmax(logits, name="y_pred")
+        self.fc1 = self.dense_layer(64, activation='relu')
+        self.fc2 = self.dense_layer(32, activation='relu')
 
-        xent = tf.nn.softmax_cross_entropy_with_logits_v2(logits=logits, labels=self.y_true)
-        self.loss = tf.reduce_mean(xent)
+        self.fc_out = self.dense_layer(self.num_class, activation='softmax')
 
-        correct_predict = tf.equal(tf.argmax(y, 1), tf.argmax(self.y_true, 1))
-        self.accuracy = tf.reduce_mean(tf.cast(correct_predict, tf.float32))
-
-        self.optimizer = tf.train.AdamOptimizer(5e-4).minimize(self.loss, self.global_step)
-
-        self.sess = tf.Session()
-        self.global_variable_initializer()
-
-    def conv_layer(self, input, input_size, output_size, scope, use_pooling=True):
-        w = tf.Variable(tf.truncated_normal([3, 3, input_size, output_size], stddev=0.1))
-        b = tf.Variable(tf.constant(0.1, shape=[output_size]))
-
-        conv = tf.nn.conv2d(input, w, strides=[1, 1, 1, 1], padding='SAME')
-        conv_bn = self.batch_normalization(conv, self.phase, scope)
-        y = tf.nn.relu(conv_bn)
-
-        if use_pooling:
-            y = tf.nn.max_pool(y, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
-        return y
+    def conv_layer(self, num_filters):
+        return keras.layers.Conv2D(num_filters,
+                            self.init_filters,
+                            strides=self.stride,
+                            padding="same",
+                            use_bias=False,
+                            data_format='channels_last',
+                            kernel_initializer="he_normal",
+                            kernel_regularizer=self.l2(1e-4))
         pass
 
-    def fc_layer(self, input, input_size, output_size, scope, use_relu=True, batch_normalization=False):
-        w = tf.Variable(tf.truncated_normal([input_size, output_size], stddev=0.1))
-        b = tf.Variable(tf.constant(0.1, shape=[output_size]))
-
-        logit = tf.matmul(input, w) + b
-
-        if batch_normalization:
-            logit = self.batch_normalization(logit, self.phase, scope)
-
-        if use_relu:
-            return tf.nn.relu(logit)
-        else:
-            return logit
+    def dense_layer(self, size=24, activation='relu'):
+        return keras.layers.Dense(units=size, activation=activation)
         pass
 
     def train_step(self, iteration):

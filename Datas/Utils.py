@@ -4,6 +4,7 @@ from __future__ import print_function
 
 from absl import flags
 import tensorflow as tf
+
 FLAGS = flags.FLAGS
 
 
@@ -93,7 +94,7 @@ def create_dataset(buffer_size, batch_size, data_format, data_dir=None):
   preprocess_train = Preprocess(data_format, train=True)
   preprocess_test = Preprocess(data_format, train=False)
 
-  dataset, metadata = tf.data.load(
+  dataset, metadata = tf.data.Dataset.load(
       'cifar10', data_dir=data_dir, as_supervised=True, with_info=True)
   train_dataset, test_dataset = dataset['train'], dataset['test']
 

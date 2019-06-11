@@ -21,9 +21,9 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+from tensorflow.python import keras
 import tensorflow as tf
-
-l2 = tf.keras.regularizers.l2
+l2 = keras.regularizers.l2
 
 def calc_from_depth(depth, num_blocks, bottleneck):
   """Calculate number of layers in each block from the depth.
@@ -120,25 +120,25 @@ class ConvBlock(tf.keras.Model):
     axis = -1 if data_format == "channels_last" else 1
     inter_filter = num_filters * 4
     # don't forget to set use_bias=False when using batchnorm
-    self.conv2 = tf.keras.layers.Conv2D(num_filters,
+    self.conv2 = keras.layers.Conv2D(num_filters,
                                         (3, 3),
                                         padding="same",
                                         use_bias=False,
                                         data_format=data_format,
                                         kernel_initializer="he_normal",
                                         kernel_regularizer=l2(weight_decay))
-    self.batchnorm1 = tf.keras.layers.BatchNormalization(axis=axis)
-    self.dropout = tf.keras.layers.Dropout(dropout_rate)
+    self.batchnorm1 = keras.layers.BatchNormalization(axis=axis)
+    self.dropout = keras.layers.Dropout(dropout_rate)
 
     if self.bottleneck:
-      self.conv1 = tf.keras.layers.Conv2D(inter_filter,
+      self.conv1 = keras.layers.Conv2D(inter_filter,
                                           (1, 1),
                                           padding="same",
                                           use_bias=False,
                                           data_format=data_format,
                                           kernel_initializer="he_normal",
                                           kernel_regularizer=l2(weight_decay))
-      self.batchnorm2 = tf.keras.layers.BatchNormalization(axis=axis)
+      self.batchnorm2 = keras.layers.BatchNormalization(axis=axis)
 
   def call(self, x, training=True):
     output = self.batchnorm1(x, training=training)
@@ -153,7 +153,7 @@ class ConvBlock(tf.keras.Model):
     return output
 
 
-class TransitionBlock(tf.keras.Model):
+class TransitionBlock(keras.Model):
   """Transition Block to reduce the number of features.
   Arguments:
     num_filters: number of filters passed to a convolutional layer.
@@ -167,17 +167,17 @@ class TransitionBlock(tf.keras.Model):
     super(TransitionBlock, self).__init__()
     axis = -1 if data_format == "channels_last" else 1
 
-    self.batchnorm = tf.keras.layers.BatchNormalization(axis=axis)
-    self.conv = tf.keras.layers.Conv2D(num_filters,
+    self.batchnorm = keras.layers.BatchNormalization(axis=axis)
+    self.conv = keras.layers.Conv2D(num_filters,
                                        (1, 1),
                                        padding="same",
                                        use_bias=False,
                                        data_format=data_format,
                                        kernel_initializer="he_normal",
                                        kernel_regularizer=l2(weight_decay))
-    self.avg_pool = tf.keras.layers.AveragePooling2D(data_format=data_format)
+    self.avg_pool = keras.layers.AveragePooling2D(data_format=data_format)
 
-  def call(self, x, training=True):
+  def __call__(self, x, training=True):
     output = self.batchnorm(x, training=training)
     output = self.conv(tf.nn.relu(output))
     output = self.avg_pool(output)
@@ -219,7 +219,7 @@ class DenseBlock(tf.keras.Model):
     return x
 
 
-class DenseNet(tf.keras.Model):
+class DenseNet(keras.Model):
   """Creating the Densenet Architecture.
   Arguments:
     mode: mode could be:

@@ -4,9 +4,10 @@ from __future__ import print_function
 
 from absl import app
 from Models.DenseNet import DenseNet
+from Models.SimpleModel import SimpleModel
 from Datas.Data import *
-import tensorflow as tf
-from Datas.Utils import *
+from tensorflow.python import keras
+
 
 class Train(object):
   """Train class.
@@ -23,16 +24,14 @@ class Train(object):
       self.loss_object = tf.losses.SparseCategoricalCrossentropy(
           from_logits=True)
 
-      self.optimizer = tf.keras.optimizers.SGD(learning_rate=0.1,
-                                               momentum=0.9, nesterov=True)
-      self.train_loss_metric = tf.keras.metrics.Mean(name='train_loss')
-      self.train_acc_metric = tf.keras.metrics.SparseCategoricalAccuracy(
+      self.optimizer = keras.optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+      self.train_loss_metric = keras.metrics.Mean(name='train_loss')
+      self.train_acc_metric = keras.metrics.SparseCategoricalAccuracy(
           name='train_accuracy')
-      self.test_loss_metric = tf.keras.metrics.Mean(name='test_loss')
-      self.test_acc_metric = tf.keras.metrics.SparseCategoricalAccuracy(
+      self.test_loss_metric = keras.metrics.Mean(name='test_loss')
+      self.test_acc_metric = keras.metrics.SparseCategoricalAccuracy(
           name='test_accuracy')
       self.model = model
-
 
   def decay(self, epoch):
     if epoch < 150:
@@ -47,7 +46,7 @@ class Train(object):
         optimizer=self.optimizer, loss=self.loss_object, metrics=['accuracy'])
     history = self.model.fit(
         train_dataset, epochs=self.epochs, validation_data=test_dataset,
-        verbose=2, callbacks=[tf.keras.callbacks.LearningRateScheduler(
+        verbose=2, callbacks=[keras.callbacks.LearningRateScheduler(
             self.decay)])
     return (history.history['loss'][-1],
             history.history['accuracy'][-1],
@@ -64,18 +63,21 @@ class Train(object):
     predictions = None
 
     if model_name == 'SimpleModel':
-        x = self.model.conv1(image)
-        x = self.model.conv2(x)
+        predictions = self.model(image)
+        loss = self.loss_object(label, predictions)
         pass
     elif model_name == 'DenseNet':
-        with tf.GradientTape() as tape:
-            predictions = self.model(image, training=True)
-            loss = self.loss_object(label, predictions)
-            loss += sum(self.model.losses)
+        predictions = self.model(image, training=True)
+        loss = self.loss_object(label, predictions)
+        loss += sum(self.model.losses)
+        pass
+
+
+
+    with tf.GradientTape() as tape:
         gradients = tape.gradient(loss, self.model.trainable_variables)
         self.optimizer.apply_gradients(
             zip(gradients, self.model.trainable_variables))
-
     self.train_loss_metric(loss)
     self.train_acc_metric(label, predictions)
 
@@ -100,15 +102,20 @@ class Train(object):
     Returns:
       train_loss, train_accuracy, test_loss, test_accuracy
     """
+    train_images = train_dataset['images']
+    train_labels = train_dataset['labels']
+
+    test_image = test_dataset['images']
+    test_label = test_dataset['labels']
 
     for epoch in range(self.epochs):
       self.optimizer.learning_rate = self.decay(epoch)
 
-      for image, label in train_dataset:
-        self.train_step(image, label)
+      for i in range(train_images.__len__()):
+        self.train_step(train_images[i], train_labels[i])
 
-      for test_image, test_label in test_dataset:
-        self.test_step(test_image, test_label)
+      for i in range(test_image.__len__()):
+        self.test_step(test_image[i], test_label[i])
 
       template = ('Epoch: {}, Train Loss: {}, Train Accuracy: {}, '
                   'Test Loss: {}, Test Accuracy: {}')
@@ -125,23 +132,22 @@ class Train(object):
         self.test_loss_metric.reset_states()
         self.test_acc_metric.reset_states()
 
-    return (self.train_loss_metric.result().numpy(),
-            self.train_acc_metric.result().numpy(),
-            self.test_loss_metric.result().numpy(),
-            self.test_acc_metric.result().numpy())
+        return (self.train_loss_metric.result().numpy(),
+                self.train_acc_metric.result().numpy(),
+                self.test_loss_metric.result().numpy(),
+                self.test_acc_metric.result().numpy())
 
 
-def run_main(argv):
+def run_main(model_name, argv):
   """Passes the flags to main.
   Args:
     argv: argv
   """
-  del argv
   kwargs = flags_dict()
-  main(**kwargs)
+  main(model_name, **kwargs)
 
 
-def main(epochs,
+def main(model_name, epochs,
          enable_function,
          buffer_size,
          batch_size,
@@ -161,21 +167,29 @@ def main(epochs,
          train_mode='custom_loop',
          data_dir=None):
 
-  model = DenseNet(mode, growth_rate, output_classes, depth_of_model,
-                            num_of_blocks, num_layers_in_each_block,
-                            data_format, bottleneck, compression, weight_decay,
-                            dropout_rate, pool_initial, include_top)
-  train_obj = Train(epochs, enable_function, model)
-  train_dataset, test_dataset, _ = create_dataset(
-      buffer_size, batch_size, data_format, data_dir)
+    model = None
+    if model_name == 'SimpleModel':
+        model = SimpleModel()
+        pass
+    elif model_name == 'DenseNet':
+        model = DenseNet(mode, growth_rate, output_classes, depth_of_model,
+                                num_of_blocks, num_layers_in_each_block,
+                                data_format, bottleneck, compression, weight_decay,
+                                dropout_rate, pool_initial, include_top)
+        pass
 
-  print('Training...')
-  if train_mode == 'custom_loop':
-    return train_obj.custom_loop(train_dataset, test_dataset)
-  elif train_mode == 'keras_fit':
-    return train_obj.keras_fit(train_dataset, test_dataset)
+    train_obj = Train(epochs, enable_function, model)
+
+    train_dataset = read_train_images(200, 200)
+    test_dataset= read_test_images(200, 200)
+
+    print('Training...')
+    if train_mode == 'custom_loop':
+        return train_obj.custom_loop(train_dataset, test_dataset)
+    elif train_mode == 'keras_fit':
+        return train_obj.keras_fit(train_dataset, test_dataset)
 
 
-if __name__ == '__main__':
-  define_densenet_flags()
-  app.run(run_main)
+def train_model():
+    define_densenet_flags()
+    app.run(run_main)

@@ -1,4 +1,4 @@
-from Models import Model as model
+from Models.TrainModel import *
 from Datas import Data as data
 import wx
 import Forms.frmTestImage as frmImage
@@ -8,8 +8,6 @@ import Forms.frmSinifEkle as frmSinif
 class Main(wx.MDIParentFrame):
     def __init__(self):
         wx.MDIParentFrame.__init__(self, None, -1, "Resim Tanıma", size=(600, 400))
-        self.data = data.Data()
-        self.model = model.Model()
         self.make_main_form()
 
     def make_main_form(self):
@@ -22,7 +20,7 @@ class Main(wx.MDIParentFrame):
         menubar.Append(menu_data, "Veriler")
 
         self.Bind(wx.EVT_MENU, self.add_data_sinif, id=1000)
-        self.Bind(wx.EVT_MENU, self.data.add_training_file, id=1001)
+        self.Bind(wx.EVT_MENU, add_training_file, id=1001)
         self.Bind(wx.EVT_MENU, self.add_test_file, id=1002)
 
         menu_model = wx.Menu()
@@ -35,7 +33,7 @@ class Main(wx.MDIParentFrame):
         menubar.Append(menu_model, "Model")
 
         self.Bind(wx.EVT_MENU, self.make_model, id=2000)
-        self.Bind(wx.EVT_MENU, self.train_model, id=2001)
+        self.Bind(wx.EVT_MENU, train_model, id=2001)
         self.Bind(wx.EVT_MENU, self.test_model, id=2002)
         self.Bind(wx.EVT_MENU, self.test_model_for_one_image, id=2003)
         self.Bind(wx.EVT_MENU, self.test_model_for_tray, id=2004)
@@ -53,16 +51,6 @@ class Main(wx.MDIParentFrame):
             wx.MessageBox('Model Oluşturuldu', 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
         else:
             wx.MessageBox('Oluşturulmuş Bir Model Mevcut!', 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
-
-    def train_model(self, evt):
-        #self.status_label.config(text='Model Eğitiliyor...')
-        #self.labelText.set('Model Eğitiliyor...')
-        if self.model.is_model_prepared():
-            self.model.train_step(400)
-        else:
-            wx.MessageBox('Model Oluşturulmamış!', 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
-
-        #self.labelText.set('Eğitim Tamamlandı')
 
     def test_model(self, evt):
         if self.model.is_model_prepared():
@@ -90,6 +78,12 @@ class Main(wx.MDIParentFrame):
         else:
             wx.MessageBox('Model Oluşturulmamış!', 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
 
+
+def train_model(argv):
+    #self.status_label.config(text='Model Eğitiliyor...')
+    #self.labelText.set('Model Eğitiliyor...')
+    run_main('SimpleModel', argv)
+    #self.labelText.set('Eğitim Tamamlandı')
 
 if __name__ == '__main__':
     app = wx.App()
