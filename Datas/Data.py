@@ -18,7 +18,7 @@ import Datas.SelectiveSearch as selectivesearch
 fields = 'Sınıf İsmi', 'Klasör İsmi'
 conn_str = (
     r'DRIVER={SQL Server};'
-    r'SERVER=localhost\SQLEXPRESS;'
+    r'SERVER=LAPTOP-1CAUHSG4;'
     r'DATABASE=YemekTanima;'
     r'Trusted_Connection=True;'
     )
@@ -29,36 +29,6 @@ training_images = []
 training_labels = []
 test_images = []
 test_labels = []
-
-def define_densenet_flags():
-  """Defining all the necessary flags."""
-  flags.DEFINE_integer('buffer_size', 50000, 'Shuffle buffer size')
-  flags.DEFINE_integer('batch_size', 64, 'Batch Size')
-  flags.DEFINE_integer('epochs', 1, 'Number of epochs')
-  flags.DEFINE_boolean('enable_function', True, 'Enable Function?')
-  flags.DEFINE_string('data_dir', None, 'Directory to store the dataset')
-  flags.DEFINE_string('mode', 'from_depth', 'Deciding how to build the model')
-  flags.DEFINE_integer('depth_of_model', 7, 'Number of layers in the model')
-  flags.DEFINE_integer('growth_rate', 12, 'Filters to add per dense block')
-  flags.DEFINE_integer('num_of_blocks', 3, 'Number of dense blocks')
-  flags.DEFINE_integer('output_classes', 10, 'Number of classes in the dataset')
-  flags.DEFINE_integer('num_layers_in_each_block', -1,
-                       'Number of layers in each dense block')
-  flags.DEFINE_string('data_format', 'channels_last',
-                      'channels_last or channels_first')
-  flags.DEFINE_boolean('bottleneck', True,
-                       'Add bottleneck blocks between layers')
-  flags.DEFINE_float(
-      'compression', 0.5,
-      'reducing the number of inputs(filters) to the transition block.')
-  flags.DEFINE_float('weight_decay', 1e-4, 'weight decay')
-  flags.DEFINE_float('dropout_rate', 0., 'dropout rate')
-  flags.DEFINE_boolean(
-      'pool_initial', False,
-      'If True add a conv => maxpool block at the start. Used for Imagenet')
-  flags.DEFINE_boolean('include_top', True, 'Include the classifier layer')
-  flags.DEFINE_string('train_mode', 'custom_loop',
-                      'Use either "keras_fit" or "custom_loop"')
 
 
 def get_sinif_list():
