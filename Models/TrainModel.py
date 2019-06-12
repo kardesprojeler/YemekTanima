@@ -75,7 +75,7 @@ class Train(object):
             pass
         elif model_name == 'DenseNet':
             predictions = self.model(image, training=True)
-            loss = self.loss_object(label, predictions)
+            loss = self.loss_function(label, predictions)
             loss += sum(self.model.losses)
             pass
     gradients = tape.gradient(loss, self.model.trainable_variables)
@@ -146,17 +146,19 @@ def run_main(model_name, argv):
 def main(model_name, epochs, enable_function, train_mode):
     model = None
     if model_name == 'SimpleModel':
-        model = SimpleModel(SimpleModelFlags.pool_initial, SimpleModelFlags.init_filter,
-                            SimpleModelFlags.stride, SimpleModelFlags.growth_rate,
-                            SimpleModelFlags.image_height, SimpleModelFlags.image_width,
-                            SimpleModelFlags.image_deep, SimpleModelFlags.batch_size, SimpleModelFlags.save_path)
+        model = SimpleModel(SimpleModelFlags.pool_initial.value, SimpleModelFlags.init_filter.value,
+                            SimpleModelFlags.stride.value, SimpleModelFlags.growth_rate.value,
+                            SimpleModelFlags.image_height.value, SimpleModelFlags.image_width.value,
+                            SimpleModelFlags.image_deep.value, SimpleModelFlags.batch_size.value,
+                            SimpleModelFlags.save_path.value)
         pass
     elif model_name == 'DenseNet':
-        model = DenseNet(DenseNetFlags.mode, DenseNetFlags.growth_rate, DenseNetFlags.output_classes,
-                         DenseNetFlags.depth_of_model, DenseNetFlags.num_of_blocks,
-                         DenseNetFlags.num_layers_in_each_block, DenseNetFlags.data_format,
-                         DenseNetFlags.bottleneck, DenseNetFlags.compression, DenseNetFlags.weight_decay,
-                         DenseNetFlags.dropout_rate, DenseNetFlags.pool_initial, DenseNetFlags.include_top)
+        model = DenseNet(DenseNetFlags.mode.value, DenseNetFlags.growth_rate.value, DenseNetFlags.output_classes.value,
+                         DenseNetFlags.depth_of_model.value, DenseNetFlags.num_of_blocks.value,
+                         DenseNetFlags.num_layers_in_each_block.value, DenseNetFlags.data_format.value,
+                         DenseNetFlags.bottleneck.value, DenseNetFlags.compression.value,
+                         DenseNetFlags.weight_decay.value, DenseNetFlags.dropout_rate.value,
+                         DenseNetFlags.pool_initial.value, DenseNetFlags.include_top.value)
         pass
 
     train_obj = Train(epochs, enable_function, model)
@@ -172,5 +174,4 @@ def main(model_name, epochs, enable_function, train_mode):
 
 
 def train_model():
-    define_densenet_flags()
     app.run(run_main)
