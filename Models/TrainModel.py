@@ -111,23 +111,21 @@ class Train(object):
     test_image = test_dataset['images']
     test_label = test_dataset['labels']
 
+    template = ('Epoch: {}, Train Loss: {}, Train Accuracy: {}, '
+                'Test Loss: {}, Test Accuracy: {}')
+
     for epoch in range(self.epochs):
       self.optimizer.learning_rate = self.decay(epoch)
-
       for i in range(train_images.__len__()):
         self.train_step(train_images[i], train_labels[i])
+        if i % 10 == 0:
+            print(template.format(epoch, self.train_loss_metric.result(),
+                                  self.train_acc_metric.result(),
+                                  self.test_loss_metric.result(),
+                                  self.test_acc_metric.result()))
 
       for i in range(test_image.__len__()):
         self.test_step(test_image[i], test_label[i])
-
-      template = ('Epoch: {}, Train Loss: {}, Train Accuracy: {}, '
-                  'Test Loss: {}, Test Accuracy: {}')
-
-      print(
-          template.format(epoch, self.train_loss_metric.result(),
-                          self.train_acc_metric.result(),
-                          self.test_loss_metric.result(),
-                          self.test_acc_metric.result()))
 
       if epoch != self.epochs - 1:
         self.train_loss_metric.reset_states()
