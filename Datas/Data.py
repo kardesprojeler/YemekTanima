@@ -1,4 +1,3 @@
-
 import os
 import shutil
 from pyodbc import connect
@@ -18,7 +17,7 @@ import Datas.SelectiveSearch as selectivesearch
 fields = 'Sınıf İsmi', 'Klasör İsmi'
 conn_str = (
     r'DRIVER={SQL Server};'
-    r'SERVER=LAPTOP-1CAUHSG4;'
+    r'SERVER=localhost\SQLEXPRESS;'
     r'DATABASE=YemekTanima;'
     r'Trusted_Connection=True;'
     )
@@ -46,7 +45,6 @@ def one_hot_label(sinif, siniflist):
     label = np.zeros((siniflist.__len__(),), dtype=int)
     finding_index = siniflist.index(sinif)
     label[finding_index] = 1
-    #label = tf.reshape(label, [1, siniflist.__len__()])
     return label
     pass
 
