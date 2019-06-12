@@ -140,7 +140,7 @@ class Train(object):
 
 
 def run_main(model_name, argv):
-  main(model_name, GeneralFlags.epoch, GeneralFlags.enable_function, GeneralFlags.train_mode)
+  main(model_name, GeneralFlags.epoch.value, GeneralFlags.enable_function.value, GeneralFlags.train_mode.value)
 
 
 def main(model_name, epochs, enable_function, train_mode):
