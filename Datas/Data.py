@@ -1,4 +1,3 @@
-
 import os
 import shutil
 from pyodbc import connect
@@ -18,17 +17,13 @@ import Datas.SelectiveSearch as selectivesearch
 fields = 'Sınıf İsmi', 'Klasör İsmi'
 conn_str = (
     r'DRIVER={SQL Server};'
-    r'SERVER=LAPTOP-1CAUHSG4;'
+    r'SERVER=localhost\SQLEXPRESS;'
     r'DATABASE=YemekTanima;'
     r'Trusted_Connection=True;'
     )
 
 cnxn = connect(conn_str)
 cursor = cnxn.cursor()
-training_images = []
-training_labels = []
-test_images = []
-test_labels = []
 
 
 def get_sinif_list():
@@ -46,23 +41,24 @@ def get_sinif_list():
     return array
 
 
-def onehotlabel(sinif, siniflist):
+def one_hot_label(sinif, siniflist):
     label = np.zeros((siniflist.__len__(),), dtype=int)
     finding_index = siniflist.index(sinif)
     label[finding_index] = 1
-    #label = tf.reshape(label, [1, siniflist.__len__()])
     return label
     pass
 
 
 def read_train_images(heigh, width):
     siniflist = get_sinif_list()
+    training_images = []
+    training_labels = []
     for sinif in siniflist:
         path = os.path.join(os.getcwd(), "images",  sinif.foldername)
         for filename in os.listdir(path):
             file_content = pilimage.open(path + "\\" + filename)
             im = file_content.resize((width, heigh), pilimage.ANTIALIAS)
-            training_labels.append(onehotlabel(sinif, siniflist))
+            training_labels.append(one_hot_label(sinif, siniflist))
             training_images.append([np.array(im)])
             pass
         row = cursor.fetchone()
@@ -78,6 +74,8 @@ def read_train_images(heigh, width):
 
 def read_test_images(heigh, width):
     siniflist = get_sinif_list()
+    test_images = []
+    test_labels = []
     for sinif in siniflist:
         cursor.execute('select id, foldername, filename from tbl_01_01_testimage a where id = ?', sinif.id)
         row = cursor.fetchone()
@@ -86,7 +84,7 @@ def read_test_images(heigh, width):
             if os.path.exists(path):
                 file_content = pilimage.open(path)
                 im = file_content.resize((width, heigh), pilimage.ANTIALIAS)
-                test_labels.append(onehotlabel(sinif, siniflist))
+                test_labels.append(one_hot_label(sinif, siniflist))
                 test_images.append([np.array(im)])
             row = cursor.fetchone()
         pass
@@ -258,23 +256,19 @@ def delete_supererogator_rect(candidates):
         candidates.remove(i)
 
 
-def random_batch(batch_size, images_size, is_training=True, append_preprocess=False):
-    images = []
-    labels = []
+def random_batch(batch_size, images, labels, append_preprocess=False):
+    batch_images = []
+    batch_labels = []
     for i in range(batch_size):
-        random_number = np.random.randint(0, images_size)
-        if is_training:
-            labels.append(training_labels[random_number])
-            image = training_images[random_number]
-        else:
-            labels.append(test_labels[random_number])
-            image = test_images[random_number]
+        random_number = np.random.randint(0, images.__len__())
+        batch_labels.append(labels[random_number])
+        img = images[random_number]
 
         if append_preprocess:
-            pre_process_image(image)
+            pre_process_image(img)
 
-        images.append(image)
-    return images, labels
+        batch_images.append(img)
+    return batch_images, batch_labels
 
 
 class DataSinif:
