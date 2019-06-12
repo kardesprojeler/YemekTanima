@@ -142,49 +142,29 @@ class Train(object):
 
 
 def run_main(model_name, argv):
-  """Passes the flags to main.
-  Args:
-    argv: argv
-  """
-  kwargs = flags_dict()
-  main(model_name, **kwargs)
+  main(model_name, GeneralFlags.epoch, GeneralFlags.enable_function, GeneralFlags.train_mode)
 
 
-def main(model_name, epochs,
-         enable_function,
-         buffer_size,
-         batch_size,
-         mode,
-         growth_rate,
-         output_classes,
-         depth_of_model=None,
-         num_of_blocks=None,
-         num_layers_in_each_block=None,
-         data_format='channels_last',
-         bottleneck=True,
-         compression=0.5,
-         weight_decay=1e-4,
-         dropout_rate=0.,
-         pool_initial=False,
-         include_top=True,
-         train_mode='custom_loop',
-         data_dir=None):
-
+def main(model_name, epochs, enable_function, train_mode):
     model = None
     if model_name == 'SimpleModel':
-        model = SimpleModel()
+        model = SimpleModel(SimpleModelFlags.pool_initial, SimpleModelFlags.init_filter,
+                            SimpleModelFlags.stride, SimpleModelFlags.growth_rate,
+                            SimpleModelFlags.image_height, SimpleModelFlags.image_width,
+                            SimpleModelFlags.image_deep, SimpleModelFlags.batch_size, SimpleModelFlags.save_path)
         pass
     elif model_name == 'DenseNet':
-        model = DenseNet(mode, growth_rate, output_classes, depth_of_model,
-                                num_of_blocks, num_layers_in_each_block,
-                                data_format, bottleneck, compression, weight_decay,
-                                dropout_rate, pool_initial, include_top)
+        model = DenseNet(DenseNetFlags.mode, DenseNetFlags.growth_rate, DenseNetFlags.output_classes,
+                         DenseNetFlags.depth_of_model, DenseNetFlags.num_of_blocks,
+                         DenseNetFlags.num_layers_in_each_block, DenseNetFlags.data_format,
+                         DenseNetFlags.bottleneck, DenseNetFlags.compression, DenseNetFlags.weight_decay,
+                         DenseNetFlags.dropout_rate, DenseNetFlags.pool_initial, DenseNetFlags.include_top)
         pass
 
     train_obj = Train(epochs, enable_function, model)
 
     train_dataset = read_train_images(200, 200)
-    test_dataset= read_test_images(200, 200)
+    test_dataset = read_test_images(200, 200)
 
     print('Training...')
     if train_mode == 'custom_loop':

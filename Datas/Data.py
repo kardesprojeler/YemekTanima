@@ -10,6 +10,7 @@ import tensorflow as tf
 import wx
 from PIL import Image as pilimage
 from absl import flags
+from enum import Enum
 FLAGS = flags.FLAGS
 
 import Datas.SelectiveSearch as selectivesearch
@@ -17,7 +18,7 @@ import Datas.SelectiveSearch as selectivesearch
 fields = 'Sınıf İsmi', 'Klasör İsmi'
 conn_str = (
     r'DRIVER={SQL Server};'
-    r'SERVER=LAPTOP-1CAUHSG4;'
+    r'SERVER=localhost\SQLEXPRESS;'
     r'DATABASE=YemekTanima;'
     r'Trusted_Connection=True;'
     )
@@ -58,34 +59,6 @@ def define_densenet_flags():
   flags.DEFINE_boolean('include_top', True, 'Include the classifier layer')
   flags.DEFINE_string('train_mode', 'custom_loop',
                       'Use either "keras_fit" or "custom_loop"')
-
-def flags_dict():
-  """Define the flags.
-  Returns:
-    Command line arguments as Flags.
-  """
-
-  kwargs = {
-      'epochs': 1,
-      'enable_function': False,
-      'buffer_size': 1000,
-      'batch_size': 64,
-      'mode': 'from_depth',
-      'depth_of_model': 6,
-      'growth_rate': 12,
-      'num_of_blocks': 3,
-      'output_classes': 10,
-      'num_layers_in_each_block': -1,
-      'data_format': 'channels_last',
-      'bottleneck': True,
-      'compression': 0.5,
-      'weight_decay': 1e-4,
-      'dropout_rate': 0.,
-      'pool_initial': False,
-      'include_top': True,
-      'train_mode': 'custom_loop'
-  }
-  return kwargs
 
 
 def get_sinif_list():
@@ -333,9 +306,65 @@ def random_batch(batch_size, images_size, is_training=True, append_preprocess=Fa
         images.append(image)
     return images, labels
 
+
 class DataSinif:
     id = -1
     sinifname = ""
     foldername = ""
     fiyat = 0
     pass
+
+
+class SimpleModelFlags(Enum):
+    buffer_size = 1000
+    batch_size = 10
+    init_filter = (3, 3)
+    stride = (1, 1)
+    save_path = None
+    mode = 'from_depth'
+    depth_of_model = 7
+    growth_rate = 12
+    num_of_blocks = 3
+    output_classes = 10
+    num_layers_in_each_block = -1
+    data_format = 'channels_last'
+    bottleneck = True
+    compression = 0.5
+    weight_decay = 1e-4
+    dropout_rate = 0.
+    pool_initial = False
+    include_top = True
+    train_mode = 'custom_loop'
+    image_height = 120
+    image_width = 120
+    image_deep = 3
+
+
+class DenseNetFlags(Enum):
+    buffer_size = 1000
+    batch_size = 10
+    init_filter = (3, 3)
+    stride = (1, 1)
+    save_path = None
+    mode = 'from_depth'
+    depth_of_model = 7
+    growth_rate = 12
+    num_of_blocks = 3
+    output_classes = 10
+    num_layers_in_each_block = -1
+    data_format = 'channels_last'
+    bottleneck = True
+    compression = 0.5
+    weight_decay = 1e-4
+    dropout_rate = 0.
+    pool_initial = False
+    include_top = True
+    train_mode = 'custom_loop'
+    image_height = 120
+    image_width = 120
+    image_deep = 3
+
+class GeneralFlags(Enum):
+    epoch = 1
+    enable_function = False,
+    train_mode = 'custom_loop'

@@ -1,6 +1,4 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-import numpy as np
-import tensorflow as tf
 from Datas.Data import *
 import os
 import wx
@@ -8,31 +6,20 @@ from tensorflow.python import keras
 
 
 class SimpleModel(keras.Model):
-    def __init__(self):
+    def __init__(self, pool_initial, init_filters, stride, grow_rate, image_height, image_width,
+                 image_deep, batch_size, save_path):
         super(SimpleModel, self).__init__()
         self.l2 = keras.regularizers.l2
-        self.pool_initial = False
-        self.init_filters = (3, 3)
-        self.stride = (1, 1)
-        self.grow_rate = 12
-        self.image_height = 64
-        self.image_width = 64
-        self.image_deep = 3
-        self.num_class = 0
-        self.training_images, training_labels = None, None
-        self.x = None
-        self.y_true = None
-        self.accuracy = None
-        self.sess = None
-        self.optimizer = None
-        self.loss = None
-        self.batch_size = 10
-        self.phase = None
-        self.save_path = ''
-        self.global_step = tf.Variable(0, trainable=False)
-        self.saver = None
+        self.pool_initial = pool_initial
+        self.init_filters = init_filters
+        self.stride = stride
+        self.grow_rate = grow_rate
+        self.image_height = image_height
+        self.image_width = image_width
+        self.image_deep = image_deep
+        self.batch_size = batch_size
+        self.save_path = save_path
         self.make_model()
-
 
     def call(self, inputs):
         inputs = np.array(inputs).reshape((1, 200, 200, 3))
@@ -102,7 +89,7 @@ class SimpleModel(keras.Model):
     def train_step(self, iteration):
         self.dt.read_train_images(self.image_height, self.image_width)
         for i in range(iteration):
-            x_batch, y_batch = self.dt.random_batch(self.batch_size, len(self.dt.training_images), is_training=True,
+            x_batch, y_batch = self.random_batch(self.batch_size, len(self.dt.training_images), is_training=True,
                                                     append_preprocess=False)
             feed_dict_train = {self.x: x_batch, self.y_true: y_batch, self.phase: True}
             [_, train_acc, g_step] = self.sess.run([self.optimizer, self.loss, self.global_step], feed_dict=feed_dict_train)
