@@ -1,6 +1,4 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
 from absl import app
 from Models.DenseNet import DenseNet
 from Models.SimpleModel import SimpleModel
@@ -30,6 +28,13 @@ class Train(object):
       self.test_acc_metric = keras.metrics.SparseCategoricalAccuracy(
           name='test_accuracy')
       self.model = model
+      self.model.load_weights(GeneralFlags.checkpoint_dir.value)
+      pass
+
+  def load_initial_weights(self):
+      if os.path.exists(GeneralFlags.checkpoint_dir.value) and self.model is not None:
+          self.model.load_weights(GeneralFlags.checkpoint_dir.value)
+          pass
 
   def decay(self, epoch):
     if epoch < 150:
@@ -105,27 +110,29 @@ class Train(object):
     Returns:
       train_loss, train_accuracy, test_loss, test_accuracy
     """
-    train_images = train_dataset['images']
-    train_labels = train_dataset['labels']
-
-    test_image = test_dataset['images']
-    test_label = test_dataset['labels']
-
     template = ('Epoch: {}, Train Loss: {}, Train Accuracy: {}, '
                 'Test Loss: {}, Test Accuracy: {}')
 
     for epoch in range(self.epochs):
       self.optimizer.learning_rate = self.decay(epoch)
-      for i in range(train_images.__len__()):
-        self.train_step(train_images[i], train_labels[i])
+      i = 0
+      for train_image, train_label in train_dataset:
+        self.train_step(train_image, train_label)
+        i = i + 1
         if i % 10 == 0:
+            self.model.save_weights(GeneralFlags.checkpoint_dir.value)
+            print("Checkpoint kaydedildi")
             print(template.format(epoch, self.train_loss_metric.result(),
                                   self.train_acc_metric.result(),
                                   self.test_loss_metric.result(),
                                   self.test_acc_metric.result()))
 
-      for i in range(test_image.__len__()):
-        self.test_step(test_image[i], test_label[i])
+        if (i + 1) % 300 == 0:
+            self.model.save_weights(GeneralFlags.checkpoint_dir.value)
+            print("Checkpoint kaydedildi")
+
+      for test_image, test_label in test_dataset:
+        self.test_step(test_image, test_label)
 
       if epoch != self.epochs - 1:
         self.train_loss_metric.reset_states()
@@ -145,12 +152,14 @@ def run_main(model_name, argv):
 
 def main(model_name, epochs, enable_function, train_mode):
     model = None
+    batch_size = 1
     if model_name == 'SimpleModel':
         model = SimpleModel(SimpleModelFlags.pool_initial.value, SimpleModelFlags.init_filter.value,
                             SimpleModelFlags.stride.value, SimpleModelFlags.growth_rate.value,
                             SimpleModelFlags.image_height.value, SimpleModelFlags.image_width.value,
                             SimpleModelFlags.image_deep.value, SimpleModelFlags.batch_size.value,
                             SimpleModelFlags.save_path.value)
+        batch_size = SimpleModelFlags.batch_size.value
         pass
     elif model_name == 'DenseNet':
         model = DenseNet(DenseNetFlags.mode.value, DenseNetFlags.growth_rate.value, DenseNetFlags.output_classes.value,
@@ -159,12 +168,13 @@ def main(model_name, epochs, enable_function, train_mode):
                          DenseNetFlags.bottleneck.value, DenseNetFlags.compression.value,
                          DenseNetFlags.weight_decay.value, DenseNetFlags.dropout_rate.value,
                          DenseNetFlags.pool_initial.value, DenseNetFlags.include_top.value)
+        batch_size = DenseNetFlags.batch_size.value
         pass
 
     train_obj = Train(epochs, enable_function, model)
 
-    train_dataset = read_train_images(200, 200)
-    test_dataset = read_test_images(200, 200)
+    train_dataset = read_train_images(200, 200, batch_size)
+    test_dataset = read_test_images(200, 200, batch_size)
 
     print('Training...')
     if train_mode == 'custom_loop':

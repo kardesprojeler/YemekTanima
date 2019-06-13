@@ -1,4 +1,4 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
+
 from Datas.Data import *
 import os
 import wx
@@ -86,20 +86,6 @@ class SimpleModel(keras.Model):
         return keras.layers.Dense(units=size, activation=activation)
         pass
 
-    def train_step(self, iteration):
-        self.dt.read_train_images(self.image_height, self.image_width)
-        for i in range(iteration):
-            x_batch, y_batch = self.random_batch(self.batch_size, len(self.dt.training_images), is_training=True,
-                                                    append_preprocess=False)
-            feed_dict_train = {self.x: x_batch, self.y_true: y_batch, self.phase: True}
-            [_, train_acc, g_step] = self.sess.run([self.optimizer, self.loss, self.global_step], feed_dict=feed_dict_train)
-            if i % 100 == 0:
-                train_acc = self.sess.run(self.accuracy, feed_dict=feed_dict_train)
-                print('Iteration:', i, 'Training accuracy:', train_acc)
-
-            if g_step % 300 == 0:
-                self.saver.save(self.sess, self.save_path)
-                print("Checkpoint kaydedildi")
 
     def test_accuracy(self):
         self.dt.read_test_images(self.image_height, self.image_width)

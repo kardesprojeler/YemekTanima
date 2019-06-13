@@ -2,7 +2,7 @@ import os
 import shutil
 from pyodbc import connect
 from tkinter import messagebox, filedialog
-
+import random
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -17,7 +17,7 @@ import Datas.SelectiveSearch as selectivesearch
 fields = 'Sınıf İsmi', 'Klasör İsmi'
 conn_str = (
     r'DRIVER={SQL Server};'
-    r'SERVER=localhost\SQLEXPRESS;'
+    r'SERVER=LAPTOP-1CAUHSG4;'
     r'DATABASE=YemekTanima;'
     r'Trusted_Connection=True;'
     )
@@ -49,33 +49,37 @@ def one_hot_label(sinif, siniflist):
     pass
 
 
-def read_train_images(heigh, width):
+def read_train_images(heigh, width, batch_size):
     siniflist = get_sinif_list()
-    training_images = []
-    training_labels = []
+    dataset = []
     for sinif in siniflist:
         path = os.path.join(os.getcwd(), "images",  sinif.foldername)
         for filename in os.listdir(path):
             file_content = pilimage.open(path + "\\" + filename)
             im = file_content.resize((width, heigh), pilimage.ANTIALIAS)
-            training_labels.append(one_hot_label(sinif, siniflist))
-            training_images.append([np.array(im)])
+            im = np.array(im).reshape((1, heigh, width, 3))
+            dataset.append([im, one_hot_label(sinif, siniflist)])
             pass
-        row = cursor.fetchone()
         pass
-    images = np.array([i for i in training_images]).reshape((len(training_images), heigh,
-                                                             width, 3))
-    dataset = {
-        'images': images,
-        'labels': training_labels
-    }
-    return dataset
+    random.shuffle(dataset)
+
+    train_dataset = []
+    batch = []
+    i = 0
+    for data in dataset:
+        i = i + 1
+        if batch_size == i:
+            train_dataset.append(batch)
+            batch = []
+            i = 0
+            pass
+        batch.append(data)
+    return train_dataset
 
 
-def read_test_images(heigh, width):
+def read_test_images(heigh, width, batch_size):
     siniflist = get_sinif_list()
-    test_images = []
-    test_labels = []
+    dataset = []
     for sinif in siniflist:
         cursor.execute('select id, foldername, filename from tbl_01_01_testimage a where id = ?', sinif.id)
         row = cursor.fetchone()
@@ -84,17 +88,23 @@ def read_test_images(heigh, width):
             if os.path.exists(path):
                 file_content = pilimage.open(path)
                 im = file_content.resize((width, heigh), pilimage.ANTIALIAS)
-                test_labels.append(one_hot_label(sinif, siniflist))
-                test_images.append([np.array(im)])
+                im = np.array(im).reshape((1, heigh, width, 3))
+                dataset.append([im, one_hot_label(sinif, siniflist)])
             row = cursor.fetchone()
         pass
-    images = np.array([i for i in test_images]).reshape((len(test_images), heigh,
-                                                         width, 3))
-    dataset = {
-        'images': images,
-        'labels': test_labels
-    }
-    return dataset
+
+    test_dataset = []
+    batch = []
+    i = 0
+    for data in dataset:
+        i = i + 1
+        if batch_size == i:
+            test_dataset.append(batch)
+            batch = []
+            i = 0
+            pass
+        batch.append(data)
+    return test_dataset
 
 
 def insertsinif(sinifname, foldername):
@@ -332,3 +342,4 @@ class GeneralFlags(Enum):
     epoch = 1
     enable_function = False,
     train_mode = 'custom_loop'
+    checkpoint_dir = os.path.join('checkpoints', 'yemek_tanima')
