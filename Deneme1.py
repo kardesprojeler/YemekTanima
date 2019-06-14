@@ -2,8 +2,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import tensorflow as tf
 
-from tensorflow.keras.layers import Dense, Flatten, Conv2D
-from tensorflow.keras import Model
+from tensorflow.python.keras.layers import Dense, Flatten, Conv2D
+from tensorflow.python.keras import Model
 
 mnist = tf.keras.datasets.mnist
 
@@ -22,9 +22,9 @@ test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(10)
 class MyModel(Model):
   def __init__(self):
     super(MyModel, self).__init__()
-    self.conv1 = Conv2D(32, 3, activation='relu')
+    self.conv1 = Conv2D(16, 1, activation='relu')
     self.flatten = Flatten()
-    self.d1 = Dense(64, activation='relu')
+    self.d1 = Dense(16, activation='relu')
     self.d2 = Dense(10, activation='softmax')
 
   def call(self, x):

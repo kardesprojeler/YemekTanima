@@ -1,9 +1,9 @@
-
 from absl import app
 from Models.DenseNet import DenseNet
 from Models.SimpleModel import SimpleModel
 from Datas.Data import *
 from tensorflow.python import keras
+import numpy as np
 
 class Train(object):
   """Train class.
@@ -63,39 +63,41 @@ class Train(object):
       loss_ *= mask
       return tf.reduce_sum(loss_) * 1. / 1
 
-  def train_step(self, image, label, model_name='SimpleModel'):
+  def train_step(self, train_ds, model_name='SimpleModel'):
     """One train step.
     Args:
       image: Batch of images.
       label: corresponding label for the batch of images.
     """
 
+    image_batch, label_batch = train_ds
+
     with tf.GradientTape() as tape:
         loss = None
         predictions = None
 
         if model_name == 'SimpleModel':
-            predictions = self.model(image)
-            loss = self.loss_function(label, predictions)
+            predictions = self.model(image_batch)
+            loss = self.loss_function(label_batch, predictions)
             pass
         elif model_name == 'DenseNet':
-            predictions = self.model(image, training=True)
-            loss = self.loss_function(label, predictions)
+            predictions = self.model(image_batch, training=True)
+            loss = self.loss_function(label_batch, predictions)
             loss += sum(self.model.losses)
             pass
     gradients = tape.gradient(loss, self.model.trainable_variables)
     self.optimizer.apply_gradients(zip(gradients, self.model.trainable_variables))
 
     self.train_loss_metric(loss)
-    self.train_acc_metric(label, predictions)
+    self.train_acc_metric(label_batch, predictions)
 
-  def test_step(self, image, label):
+  def test_step(self, data):
     """One test step.
     Args:
       image: Batch of images.
       label: corresponding label for the batch of images.
     """
-
+    image, label = data
     predictions = self.model(image, training=False)
     loss = self.loss_object(label, predictions)
 
@@ -114,31 +116,40 @@ class Train(object):
                 'Test Loss: {}, Test Accuracy: {}')
 
     for epoch in range(self.epochs):
-      self.optimizer.learning_rate = self.decay(epoch)
-      i = 0
-      for train_image, train_label in train_dataset:
-        self.train_step(train_image, train_label)
-        i = i + 1
-        if i % 10 == 0:
-            self.model.save_weights(GeneralFlags.checkpoint_dir.value)
-            print("Checkpoint kaydedildi")
-            print(template.format(epoch, self.train_loss_metric.result(),
-                                  self.train_acc_metric.result(),
-                                  self.test_loss_metric.result(),
-                                  self.test_acc_metric.result()))
+        self.optimizer.learning_rate = self.decay(epoch)
+        """
+        if False:
+            self.train_step = tf.function(self.train_step)
+            self.test_step = tf.function(self.test_step)
+            pass
+        """
+        i = 0
+        for epoch in range(self.epochs):
+            for data in train_dataset:
+                i = i + 1
+                self.train_step(data)
+                if i % 10 == 0:
+                    print(template.format(epoch, self.train_loss_metric.result(),
+                                          self.train_acc_metric.result(),
+                                          self.test_loss_metric.result(),
+                                          self.test_acc_metric.result()))
+                    pass
 
-        if (i + 1) % 300 == 0:
-            self.model.save_weights(GeneralFlags.checkpoint_dir.value)
-            print("Checkpoint kaydedildi")
+                if (i + 1) % 300 == 0:
+                    self.model.save_weights(GeneralFlags.checkpoint_dir.value)
+                    print("Checkpoint kaydedildi")
+                    pass
+                pass
 
-      for test_image, test_label in test_dataset:
-        self.test_step(test_image, test_label)
+            for data in test_dataset:
+                self.test_step(data)
+                pass
 
-      if epoch != self.epochs - 1:
-        self.train_loss_metric.reset_states()
-        self.train_acc_metric.reset_states()
-        self.test_loss_metric.reset_states()
-        self.test_acc_metric.reset_states()
+        if epoch != self.epochs - 1:
+            self.train_loss_metric.reset_states()
+            self.train_acc_metric.reset_states()
+            self.test_loss_metric.reset_states()
+            self.test_acc_metric.reset_states()
 
         return (self.train_loss_metric.result().numpy(),
                 self.train_acc_metric.result().numpy(),

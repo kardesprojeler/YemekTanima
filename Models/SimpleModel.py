@@ -22,7 +22,6 @@ class SimpleModel(keras.Model):
         self.make_model()
 
     def call(self, inputs):
-        inputs = np.array(inputs).reshape((1, 200, 200, 3))
         x = self.conv1(tf.cast(inputs, tf.float32))
         x = keras.layers.BatchNormalization(axis=-1)(x)
         x = self.conv2(x)

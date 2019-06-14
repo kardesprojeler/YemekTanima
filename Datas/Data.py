@@ -2,7 +2,6 @@ import os
 import shutil
 from pyodbc import connect
 from tkinter import messagebox, filedialog
-import random
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -11,7 +10,7 @@ from PIL import Image as pilimage
 from absl import flags
 from enum import Enum
 FLAGS = flags.FLAGS
-
+import cv2
 import Datas.SelectiveSearch as selectivesearch
 
 fields = 'Sınıf İsmi', 'Klasör İsmi'
@@ -48,21 +47,27 @@ def one_hot_label(sinif, siniflist):
     return label
     pass
 
-
 def read_train_images(heigh, width, batch_size):
     siniflist = get_sinif_list()
-    dataset = []
+    images = []
+    labels = []
     for sinif in siniflist:
         path = os.path.join(os.getcwd(), "images",  sinif.foldername)
         for filename in os.listdir(path):
-            file_content = pilimage.open(path + "\\" + filename)
-            im = file_content.resize((width, heigh), pilimage.ANTIALIAS)
-            im = np.array(im).reshape((1, heigh, width, 3))
-            dataset.append([im, one_hot_label(sinif, siniflist)])
+            file_content = cv2.imread(os.path.join(path, filename))
+            if file_content is not None:
+                im = cv2.resize(file_content, dsize=(heigh, width), interpolation=cv2.INTER_CUBIC)
+                images.append(im)
+                labels.append(siniflist.index(sinif))
             pass
         pass
-    random.shuffle(dataset)
+    images = np.array(images)
+    images = images / 255.0
 
+    train_ds = tf.data.Dataset.from_tensor_slices(
+        (images, labels)).shuffle(len(images)).batch(batch_size=batch_size)
+
+    """
     train_dataset = []
     batch = []
     i = 0
@@ -74,25 +79,35 @@ def read_train_images(heigh, width, batch_size):
             i = 0
             pass
         batch.append(data)
-    return train_dataset
+    """
+    return train_ds
 
 
 def read_test_images(heigh, width, batch_size):
     siniflist = get_sinif_list()
-    dataset = []
+    images = []
+    labels = []
     for sinif in siniflist:
         cursor.execute('select id, foldername, filename from tbl_01_01_testimage a where id = ?', sinif.id)
         row = cursor.fetchone()
         while row:
             path = os.path.join(os.getcwd(), "images", row[1], row[2])
-            if os.path.exists(path):
-                file_content = pilimage.open(path)
-                im = file_content.resize((width, heigh), pilimage.ANTIALIAS)
-                im = np.array(im).reshape((1, heigh, width, 3))
-                dataset.append([im, one_hot_label(sinif, siniflist)])
+            file_content = cv2.imread(path)
+            if file_content is not None:
+                im = cv2.resize(file_content, dsize=(heigh, width), interpolation=cv2.INTER_CUBIC)
+                images.append(im)
+                labels.append(siniflist.index(sinif))
             row = cursor.fetchone()
         pass
-
+    images = np.array(images)
+    images = images / 255.0
+    buffer_size = 5
+    if len(images) > 0:
+        buffer_size = len(images)
+        pass
+    test_ds = tf.data.Dataset.from_tensor_slices(
+        (images, labels)).shuffle(buffer_size).batch(batch_size=batch_size)
+    """
     test_dataset = []
     batch = []
     i = 0
@@ -104,7 +119,8 @@ def read_test_images(heigh, width, batch_size):
             i = 0
             pass
         batch.append(data)
-    return test_dataset
+        """
+    return test_ds
 
 
 def insertsinif(sinifname, foldername):
