@@ -1,9 +1,7 @@
-
 from Datas.Data import *
 import os
 import wx
 from tensorflow.python import keras
-
 
 class SimpleModel(keras.Model):
     def __init__(self, pool_initial, init_filters, stride, grow_rate, image_height, image_width,
@@ -19,18 +17,20 @@ class SimpleModel(keras.Model):
         self.image_deep = image_deep
         self.batch_size = batch_size
         self.save_path = save_path
+        self.batch_normalization = keras.layers.BatchNormalization(axis=-1)
         self.make_model()
 
-    def call(self, inputs):
-        x = self.conv1(tf.cast(inputs, tf.float32))
-        x = keras.layers.BatchNormalization(axis=-1)(x)
+    def call(self, x: tf.Tensor, training: bool = True):
+        x = self.conv1(tf.cast(x, tf.float32))
+        x = self.batchnorm1(x, training=training)
+        x = tf.nn.relu(x)
         x = self.conv2(x)
-        x = keras.layers.BatchNormalization(axis=-1)(x)
+        x = self.batchnorm2(x, training=training)
+        x = tf.nn.relu(x)
         x = self.conv3(x)
-        x = keras.layers.BatchNormalization(axis=-1)(x)
-
+        x = self.batchnorm3(x, training=training)
+        x = tf.nn.relu(x)
         x = self.flattened(x)
-
         x = self.fc1(x)
         x = self.fc2(x)
         return self.fc_out(x)
@@ -53,15 +53,14 @@ class SimpleModel(keras.Model):
             print("Checkpoint bulunamadı")
             self.sess.run()
 
-    def batch_normalization(self, input):
-        return keras.layers.BatchNormalization(input)
-
     def make_model(self):
         self.num_class = getsinifcount()
-
         self.conv1 = self.conv_layer(24)
+        self.batchnorm1 = keras.layers.BatchNormalization()
         self.conv2 = self.conv_layer(48)
+        self.batchnorm2 = keras.layers.BatchNormalization()
         self.conv3 = self.conv_layer(24)
+        self.batchnorm3 = keras.layers.BatchNormalization()
 
         self.flattened = keras.layers.Flatten()
 
@@ -134,4 +133,3 @@ class SimpleModel(keras.Model):
             wx.MessageBox((probability * 100).__str__() + " " + sinif_name, 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
 
         wx.MessageBox('Toplam Fiyat: ' + toplam_fiyat.__str__(), 'Bilgilendirme', wx.OK | wx.ICON_INFORMATION)
-

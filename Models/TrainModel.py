@@ -1,164 +1,129 @@
+
+import tensorflow as tf  # TF2
+
+assert tf.__version__.startswith('2')
 from absl import app
 from Models.DenseNet import DenseNet
 from Models.SimpleModel import SimpleModel
 from Datas.Data import *
 from tensorflow.python import keras
-import numpy as np
+
 
 class Train(object):
-  """Train class.
-  Args:
+    """Train class.
+    Args:
     epochs: Number of epochs
     enable_function: If True, wraps the train_step and test_step in tf.function
     model: Densenet model.
-  """
-
-  def __init__(self, epochs, enable_function, model):
-      self.epochs = epochs
-      self.enable_function = enable_function
-      self.autotune = tf.data.experimental.AUTOTUNE
-      self.loss_object = tf.keras.losses.SparseCategoricalCrossentropy(
-          reduction=tf.keras.losses.Reduction.SUM)
-
-      self.optimizer = tf.keras.optimizers.Adam()
-      self.train_loss_metric = keras.metrics.Mean(name='train_loss')
-      self.train_acc_metric = keras.metrics.SparseCategoricalAccuracy(
-          name='train_accuracy')
-      self.test_loss_metric = keras.metrics.Mean(name='test_loss')
-      self.test_acc_metric = keras.metrics.SparseCategoricalAccuracy(
-          name='test_accuracy')
-      self.model = model
-      self.model.load_weights(GeneralFlags.checkpoint_dir.value)
-      pass
-
-  def load_initial_weights(self):
-      if os.path.exists(GeneralFlags.checkpoint_dir.value) and self.model is not None:
-          self.model.load_weights(GeneralFlags.checkpoint_dir.value)
-          pass
-
-  def decay(self, epoch):
-    if epoch < 150:
-      return 0.1
-    if epoch >= 150 and epoch < 225:
-      return 0.01
-    if epoch >= 225:
-      return 0.001
-
-  def keras_fit(self, train_dataset, test_dataset):
-    self.model.compile(
-        optimizer=self.optimizer, loss=self.loss_object, metrics=['accuracy'])
-    history = self.model.fit(
-        train_dataset, epochs=self.epochs, validation_data=test_dataset,
-        verbose=2, callbacks=[keras.callbacks.LearningRateScheduler(
-            self.decay)])
-    return (history.history['loss'][-1],
-            history.history['accuracy'][-1],
-            history.history['val_loss'][-1],
-            history.history['val_accuracy'][-1])
-
-  def loss_function(self, real, pred):
-      mask = tf.math.logical_not(tf.math.equal(real, 0))
-      loss_ = tf.nn.softmax_cross_entropy_with_logits(real, pred)
-      mask = tf.cast(mask, dtype=loss_.dtype)
-      loss_ *= mask
-      return tf.reduce_sum(loss_) * 1. / 1
-
-  def train_step(self, train_ds, model_name='SimpleModel'):
-    """One train step.
-    Args:
-      image: Batch of images.
-      label: corresponding label for the batch of images.
     """
 
-    image_batch, label_batch = train_ds
+    def __init__(self, epochs, enable_function, model):
+        self.epochs = epochs
+        self.enable_function = enable_function
+        self.autotune = tf.data.experimental.AUTOTUNE
+        self.loss_object = tf.keras.losses.SparseCategoricalCrossentropy(reduction=tf.keras.losses.Reduction.NONE)
+        self.optimizer = tf.keras.optimizers.Adam(learning_rate=1e-5, beta_1=0.5)
+        self.training_loss = tf.keras.metrics.Mean("training_loss", dtype=tf.float32)
+        self.training_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(
+            "training_accuracy", dtype=tf.float32)
+        self.test_loss = tf.keras.metrics.Mean("test_loss", dtype=tf.float32)
+        self.test_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(
+            "test_accuracy", dtype=tf.float32)
+        self.test_acc_metric = keras.metrics.SparseCategoricalAccuracy(
+            name='test_accuracy', dtype=tf.float32)
+        self.model = model
+        self.checkpoint = tf.train.Checkpoint(optimizer=self.optimizer, model=model)
+        pass
 
-    with tf.GradientTape() as tape:
-        loss = None
-        predictions = None
+    def loss_function(self, real, pred, batch_size):
+        mask = tf.math.logical_not(tf.math.equal(real, 0))
+        loss_ = self.loss_object(real, pred)
 
-        if model_name == 'SimpleModel':
-            predictions = self.model(image_batch)
-            loss = self.loss_function(label_batch, predictions)
-            pass
-        elif model_name == 'DenseNet':
-            predictions = self.model(image_batch, training=True)
-            loss = self.loss_function(label_batch, predictions)
-            loss += sum(self.model.losses)
-            pass
-    gradients = tape.gradient(loss, self.model.trainable_variables)
-    self.optimizer.apply_gradients(zip(gradients, self.model.trainable_variables))
+        mask = tf.cast(mask, dtype=loss_.dtype)
+        loss_ *= mask
 
-    self.train_loss_metric(loss)
-    self.train_acc_metric(label_batch, predictions)
+        return tf.reduce_sum(loss_) * 1. / batch_size
 
-  def test_step(self, data):
-    """One test step.
-    Args:
-      image: Batch of images.
-      label: corresponding label for the batch of images.
-    """
-    image, label = data
-    predictions = self.model(image, training=False)
-    loss = self.loss_object(label, predictions)
+    def train_step(self, image_batch, label_batch, model_name):
+        with tf.GradientTape() as tape:
+            loss = None
+            predictions = None
 
-    self.test_loss_metric(loss)
-    self.test_acc_metric(label, predictions)
+            if model_name == 'SimpleModel':
+                predictions = self.model(image_batch)
+                loss = self.loss_function(label_batch, predictions, SimpleModelFlags.batch_size.value)
+                pass
+            elif model_name == 'DenseNet':
+                predictions = self.model(image_batch, training=True)
+                loss = self.loss_function(label_batch, predictions, DenseNetFlags.batch_size.value)
+                pass
+        gradients = tape.gradient(loss, self.model.trainable_variables)
+        self.optimizer.apply_gradients(zip(gradients, self.model.trainable_variables))
 
-  def custom_loop(self, train_dataset, test_dataset):
-    """Custom training and testing loop.
-    Args:
-      train_dataset: Training dataset
-      test_dataset: Testing dataset
-    Returns:
-      train_loss, train_accuracy, test_loss, test_accuracy
-    """
-    template = ('Epoch: {}, Train Loss: {}, Train Accuracy: {}, '
-                'Test Loss: {}, Test Accuracy: {}')
+        self.training_accuracy.update_state(label_batch, predictions)
+        self.training_loss(loss)
+        return loss
 
-    for epoch in range(self.epochs):
-        self.optimizer.learning_rate = self.decay(epoch)
+    def test_step(self, images, labels, batch_size):
+        """One test step.
+        Args:
+          inputs_test: tuple of input tensor, target tensor.
+        Returns:
+          Loss value so that it can be used with `tf.distribute.Strategy`.
         """
-        if False:
-            self.train_step = tf.function(self.train_step)
-            self.test_step = tf.function(self.test_step)
-            pass
+
+        logits = self.model(images)
+        loss = self.loss_function(logits, labels, batch_size)
+        self.test_loss.update_state(loss)
+        self.test_accuracy.update_state(labels, logits)
+
+    def training_loop(self, train_dist_dataset, test_dist_dataset, is_there_test, model_name, strategy):
+        """Custom training and testing loop.
+        Args:
+          train_dist_dataset: Training dataset created using strategy.
+          test_dist_dataset: Testing dataset created using strategy.
+          strategy: Distribution strategy
+        Returns:
+          train_loss, test_loss
         """
-        i = 0
+        @tf.function()
+        def distributed_train_epoch(ds):
+            total_loss = 0.0
+            num_train_batches = 0.0
+            for images, labels in ds:
+                per_replica_loss = strategy.experimental_run_v2(
+                    self.train_step, args=(images, labels, model_name))
+                total_loss += strategy.reduce(
+                    tf.distribute.ReduceOp.SUM, per_replica_loss, axis=None)
+                num_train_batches += 1
+            return total_loss, num_train_batches
+
+        @tf.function()
+        def distributed_test_epoch(ds):
+            for images, labels in ds:
+                strategy.experimental_run_v2(
+                    self.test_step, args=(images, labels, model_name))
+            return self.test_loss.result()
+
+        if self.enable_function:
+            distributed_train_epoch = tf.function(distributed_train_epoch)
+            distributed_test_epoch = tf.function(distributed_test_epoch)
+
+        template = 'Epoch: {}, Train Loss: {}, Train Accuracy: {}'
+        train_total_loss = 0
+        num_train_batches = 1
+        test_total_loss = 0
         for epoch in range(self.epochs):
-            for data in train_dataset:
-                i = i + 1
-                self.train_step(data)
-                if i % 10 == 0:
-                    print(template.format(epoch, self.train_loss_metric.result(),
-                                          self.train_acc_metric.result(),
-                                          self.test_loss_metric.result(),
-                                          self.test_acc_metric.result()))
-                    pass
+            train_total_loss, num_train_batches = distributed_train_epoch(train_dist_dataset)
+            if is_there_test:
+                test_total_loss = distributed_test_epoch(test_dist_dataset)
+            print(template.format(epoch, train_total_loss / num_train_batches, self.training_accuracy.result() * 100))
 
-                if (i + 1) % 300 == 0:
-                    self.model.save_weights(GeneralFlags.checkpoint_dir.value)
-                    print("Checkpoint kaydedildi")
-                    pass
-                pass
-
-            for data in test_dataset:
-                self.test_step(data)
-                pass
-
-        if epoch != self.epochs - 1:
-            self.train_loss_metric.reset_states()
-            self.train_acc_metric.reset_states()
-            self.test_loss_metric.reset_states()
-            self.test_acc_metric.reset_states()
-
-        return (self.train_loss_metric.result().numpy(),
-                self.train_acc_metric.result().numpy(),
-                self.test_loss_metric.result().numpy(),
-                self.test_acc_metric.result().numpy())
+        return (train_total_loss / num_train_batches, test_total_loss)
 
 
 def run_main(model_name, argv):
-  main(model_name, GeneralFlags.epoch.value, GeneralFlags.enable_function.value, GeneralFlags.train_mode.value)
+    main(model_name, GeneralFlags.epoch.value, GeneralFlags.enable_function.value, GeneralFlags.train_mode.value)
 
 
 def main(model_name, epochs, enable_function, train_mode):
@@ -182,16 +147,31 @@ def main(model_name, epochs, enable_function, train_mode):
         batch_size = DenseNetFlags.batch_size.value
         pass
 
-    train_obj = Train(epochs, enable_function, model)
+    strategy = tf.distribute.MirroredStrategy()
 
-    train_dataset = read_train_images(200, 200, batch_size)
-    test_dataset = read_test_images(200, 200, batch_size)
+    with strategy.scope():
 
-    print('Training...')
-    if train_mode == 'custom_loop':
-        return train_obj.custom_loop(train_dataset, test_dataset)
-    elif train_mode == 'keras_fit':
-        return train_obj.keras_fit(train_dataset, test_dataset)
+        train_ds, test_ds, is_there_test = get_datasets(strategy, batch_size)
+
+        train_obj = Train(epochs, False, model)
+        print('Training ...')
+        return train_obj.training_loop(train_ds, test_ds, is_there_test, model_name, strategy)
+
+def get_datasets(strategy, batch_size):
+    x_train, y_train = read_train_images(200, 200)
+    x_test, y_test = read_test_images(200, 200)
+
+    # Numpy defaults to dtype=float64; TF defaults to float32. Stick with float32.
+    x_train, x_test = x_train / np.float32(255), x_test / np.float32(255)
+    y_train, y_test = y_train.astype(np.int64), y_test.astype(np.int64)
+
+    train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)).shuffle(len(x_train)).batch(batch_size)
+    train_dist_dataset = strategy.experimental_distribute_dataset(train_dataset)
+
+    test_dataset = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(batch_size)
+    test_dist_dataset = strategy.experimental_distribute_dataset(test_dataset)
+
+    return train_dist_dataset, test_dist_dataset, len(x_test) > 0
 
 
 def train_model():

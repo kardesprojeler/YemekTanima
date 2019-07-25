@@ -1,5 +1,4 @@
 from Models.TrainModel import *
-from Datas import Data as data
 import wx
 import Forms.frmTestImage as frmImage
 import Forms.frmSinifEkle as frmSinif

@@ -47,7 +47,7 @@ def one_hot_label(sinif, siniflist):
     return label
     pass
 
-def read_train_images(heigh, width, batch_size):
+def read_train_images(heigh, width):
     siniflist = get_sinif_list()
     images = []
     labels = []
@@ -61,29 +61,11 @@ def read_train_images(heigh, width, batch_size):
                 labels.append(siniflist.index(sinif))
             pass
         pass
-    images = np.array(images)
-    images = images / 255.0
-
-    train_ds = tf.data.Dataset.from_tensor_slices(
-        (images, labels)).shuffle(len(images)).batch(batch_size=batch_size)
-
-    """
-    train_dataset = []
-    batch = []
-    i = 0
-    for data in dataset:
-        i = i + 1
-        if batch_size == i:
-            train_dataset.append(batch)
-            batch = []
-            i = 0
-            pass
-        batch.append(data)
-    """
-    return train_ds
+    images, labels = random_batch(len(images), images, labels)
+    return np.array(images), np.array(labels)
 
 
-def read_test_images(heigh, width, batch_size):
+def read_test_images(heigh, width):
     siniflist = get_sinif_list()
     images = []
     labels = []
@@ -99,28 +81,7 @@ def read_test_images(heigh, width, batch_size):
                 labels.append(siniflist.index(sinif))
             row = cursor.fetchone()
         pass
-    images = np.array(images)
-    images = images / 255.0
-    buffer_size = 5
-    if len(images) > 0:
-        buffer_size = len(images)
-        pass
-    test_ds = tf.data.Dataset.from_tensor_slices(
-        (images, labels)).shuffle(buffer_size).batch(batch_size=batch_size)
-    """
-    test_dataset = []
-    batch = []
-    i = 0
-    for data in dataset:
-        i = i + 1
-        if batch_size == i:
-            test_dataset.append(batch)
-            batch = []
-            i = 0
-            pass
-        batch.append(data)
-        """
-    return test_ds
+    return np.array(images), np.array(labels)
 
 
 def insertsinif(sinifname, foldername):
@@ -146,8 +107,8 @@ def getsinifcount():
 
 def add_data_sinif(sinifname, foldername):
     if sinifname is not '' and foldername is not '':
-        if not os.path.exists(r"C:/Users/BULUT/Documents/GitHub/YemekTanima/images/" + foldername):
-            os.mkdir(r"C:/Users/BULUT/Documents/GitHub/YemekTanima/images/" + foldername)
+        if not os.path.exists(r"‪C:\Users\Durkan\Desktop\1.jpg" + foldername):
+            os.mkdir(r"‪C:\Users\Durkan\Desktop\1.jpg" + foldername)
             insertsinif(foldername, sinifname)
             pass
         else:
@@ -307,7 +268,7 @@ class DataSinif:
 
 class SimpleModelFlags(Enum):
     buffer_size = 1000
-    batch_size = 10
+    batch_size = 20
     init_filter = (3, 3)
     stride = (1, 1)
     save_path = None
@@ -355,7 +316,7 @@ class DenseNetFlags(Enum):
     image_deep = 3
 
 class GeneralFlags(Enum):
-    epoch = 1
+    epoch = 3
     enable_function = False,
     train_mode = 'custom_loop'
-    checkpoint_dir = os.path.join('checkpoints', 'yemek_tanima')
+    checkpoint_dir = r'C:\Users\BULUT\Documents\GitHub\YemekTanima\checkpoints'
